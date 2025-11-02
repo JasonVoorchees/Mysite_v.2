@@ -34,40 +34,186 @@
 </header>
 
   <main class="main">
+    <div class="settings-grid">
+      <section class="card settings-card">
+        <h2>Оформление</h2>
 
-    <section class="card settings-card">
-      <h2>Размер шрифта</h2>
-      <div class="row">
-        <input id="fontRange" type="range" min="85" max="160" step="1" />
-        <span id="fontLabel" class="hint">100%</span>
-      </div>
-    </section>
-
-    <section class="card settings-card">
-      <h2>Тема оформления</h2>
-      <div class="row theme-row">
-        <label class="radio"><input type="radio" name="theme" value="light" /> Светлая</label>
-        <label class="radio"><input type="radio" name="theme" value="dark" /> Тёмная</label>
-        <label class="radio"><input type="radio" name="theme" value="retro" /> Ретро</label>
-        <label class="radio"><input type="radio" name="theme" value="sepia" /> Сепия</label>
-      </div>
-    </section>
-
-    <section class="card settings-card">
-      <h2>Конфиденциальность профиля</h2>
-      <div class="row">
-        <div class="privacy-control" data-open="false">
-          <button id="privacyToggle" class="ios-button privacy-toggle" type="button" aria-haspopup="listbox" aria-controls="privacyMenu" aria-expanded="false">
-            Публичный
-          </button>
-          <div id="privacyMenu" class="privacy-menu" role="listbox" aria-labelledby="privacyToggle" hidden>
-            <button type="button" class="privacy-option" data-value="public" role="option">Публичный</button>
-            <button type="button" class="privacy-option" data-value="friends" role="option">Только друзьям</button>
-            <button type="button" class="privacy-option" data-value="private" role="option">Закрытый</button>
+        <div class="settings-group">
+          <h3 class="settings-subtitle">Тема оформления</h3>
+          <p class="settings-note">Переключайте готовые темы в один клик — все страницы мгновенно подстраиваются.</p>
+          <div class="row theme-row">
+            <label class="radio"><input type="radio" name="theme" value="dark" data-pref="theme" data-toast="Тема: тёмная" /> Тёмная</label>
+            <label class="radio"><input type="radio" name="theme" value="light" data-pref="theme" data-toast="Тема: светлая" /> Светлая</label>
+            <label class="radio"><input type="radio" name="theme" value="system" data-pref="theme" data-toast="Тема: системная" /> Системная</label>
+            <label class="radio"><input type="radio" name="theme" value="contrast" data-pref="theme" data-toast="Тема: высокая контрастность" /> Контрастная</label>
+            <label class="radio"><input type="radio" name="theme" value="retro" data-pref="theme" data-toast="Тема: ретро" /> Ретро</label>
+            <label class="radio"><input type="radio" name="theme" value="sepia" data-pref="theme" data-toast="Тема: сепия" /> Сепия</label>
           </div>
         </div>
-      </div>
-    </section>
+
+        <div class="settings-group">
+          <h3 class="settings-subtitle">Акцентный цвет</h3>
+          <p class="settings-note">Акцент меняет оттенок кнопок, ссылок и подсветок во всех разделах.</p>
+          <div class="row theme-row accent-row">
+            <label class="radio accent-option accent-option--blue"><input type="radio" name="accent" value="blue" data-pref="accent" data-toast="Акцент: синий" /> <span aria-hidden="true" class="accent-option__dot"></span> Синий</label>
+            <label class="radio accent-option accent-option--violet"><input type="radio" name="accent" value="violet" data-pref="accent" data-toast="Акцент: фиолетовый" /> <span aria-hidden="true" class="accent-option__dot"></span> Фиолетовый</label>
+            <label class="radio accent-option accent-option--emerald"><input type="radio" name="accent" value="emerald" data-pref="accent" data-toast="Акцент: морской" /> <span aria-hidden="true" class="accent-option__dot"></span> Морской</label>
+            <label class="radio accent-option accent-option--amber"><input type="radio" name="accent" value="amber" data-pref="accent" data-toast="Акцент: янтарный" /> <span aria-hidden="true" class="accent-option__dot"></span> Янтарный</label>
+            <label class="radio accent-option accent-option--rose"><input type="radio" name="accent" value="rose" data-pref="accent" data-toast="Акцент: розовый" /> <span aria-hidden="true" class="accent-option__dot"></span> Розовый</label>
+          </div>
+        </div>
+
+        <div class="settings-group">
+          <h3 class="settings-subtitle">Внешний вид карточек</h3>
+          <p class="settings-note">Карточки — основа интерфейса, меняйте их стиль для лучшего восприятия.</p>
+          <div class="row theme-row">
+            <label class="radio"><input type="radio" name="cardStyle" value="elevated" data-pref="cardStyle" data-toast="Карточки приподняты" /> Объёмные</label>
+            <label class="radio"><input type="radio" name="cardStyle" value="flat" data-pref="cardStyle" data-toast="Карточки упрощены" /> Плоские</label>
+            <label class="radio"><input type="radio" name="cardStyle" value="outline" data-pref="cardStyle" data-toast="Карточки с контуром" /> С контуром</label>
+          </div>
+        </div>
+      </section>
+
+      <section class="card settings-card">
+        <h2>Типографика</h2>
+
+        <div class="settings-group">
+          <h3 class="settings-subtitle">Размер шрифта</h3>
+          <p class="settings-note">Ползунок масштабирует интерфейс без перезагрузки страниц.</p>
+          <div class="row range-row">
+            <input id="fontRange" type="range" min="85" max="160" step="1" />
+            <span id="fontLabel" class="hint">100%</span>
+          </div>
+        </div>
+
+        <div class="settings-group">
+          <h3 class="settings-subtitle">Семейство шрифта</h3>
+          <div class="row theme-row">
+            <label class="radio"><input type="radio" name="fontFamily" value="system" data-pref="fontFamily" data-toast="Шрифт: системный" /> Системный</label>
+            <label class="radio"><input type="radio" name="fontFamily" value="serif" data-pref="fontFamily" data-toast="Шрифт: с засечками" /> Классический</label>
+            <label class="radio"><input type="radio" name="fontFamily" value="rounded" data-pref="fontFamily" data-toast="Шрифт: округлый" /> Округлый</label>
+            <label class="radio"><input type="radio" name="fontFamily" value="mono" data-pref="fontFamily" data-toast="Шрифт: моноширинный" /> Моноширинный</label>
+          </div>
+        </div>
+
+        <div class="settings-group">
+          <h3 class="settings-subtitle">Межстрочный интервал</h3>
+          <div class="row theme-row">
+            <label class="radio"><input type="radio" name="lineHeight" value="normal" data-pref="lineHeight" data-toast="Интервал: стандартный" /> Стандарт</label>
+            <label class="radio"><input type="radio" name="lineHeight" value="relaxed" data-pref="lineHeight" data-toast="Интервал: свободный" /> Свободный</label>
+            <label class="radio"><input type="radio" name="lineHeight" value="compact" data-pref="lineHeight" data-toast="Интервал: компактный" /> Компактный</label>
+          </div>
+        </div>
+      </section>
+
+      <section class="card settings-card">
+        <h2>Макет</h2>
+        <div class="settings-option">
+          <div class="setting-option__info">
+            <span class="setting-option__title">Плотность интерфейса</span>
+            <span class="setting-option__desc">Уменьшает или увеличивает отступы и расстояние между блоками.</span>
+          </div>
+          <select data-pref="density" data-toast="Плотность обновлена">
+            <option value="cozy">Стандартная</option>
+            <option value="compact">Компактная</option>
+            <option value="spacious">Воздушная</option>
+          </select>
+        </div>
+        <div class="settings-option">
+          <div class="setting-option__info">
+            <span class="setting-option__title">Ширина боковой панели</span>
+            <span class="setting-option__desc">Подберите комфортную ширину навигации.</span>
+          </div>
+          <select data-pref="sidebarSize" data-toast="Ширина меню обновлена">
+            <option value="narrow">Узкая</option>
+            <option value="normal">Стандартная</option>
+            <option value="wide">Расширенная</option>
+          </select>
+        </div>
+        <div class="settings-option">
+          <div class="setting-option__info">
+            <span class="setting-option__title">Поведение верхней панели</span>
+            <span class="setting-option__desc">Закрепите панель или сделайте её статичной.</span>
+          </div>
+          <select data-pref="topbarMode" data-toast="Верхняя панель обновлена">
+            <option value="floating">Всегда на виду</option>
+            <option value="static">Статично вверху</option>
+            <option value="hidden">Скрыть панель</option>
+          </select>
+        </div>
+      </section>
+
+      <section class="card settings-card">
+        <h2>Удобство и стабильность</h2>
+        <div class="settings-option">
+          <div class="setting-option__info">
+            <span class="setting-option__title">Снизить анимации</span>
+            <span class="setting-option__desc">Отключает плавные переходы и эффекты движения для устойчивости.</span>
+          </div>
+          <label class="switch">
+            <input type="checkbox" data-pref="reduceMotion" data-toast="Анимации отключены" />
+            <span class="switch-slider" aria-hidden="true"></span>
+          </label>
+        </div>
+        <div class="settings-option">
+          <div class="setting-option__info">
+            <span class="setting-option__title">Сильный контур фокуса</span>
+            <span class="setting-option__desc">Добавляет заметный обвод для клавиатурной навигации.</span>
+          </div>
+          <label class="switch">
+            <input type="checkbox" data-pref="focusStrong" data-toast="Фокус усилен" />
+            <span class="switch-slider" aria-hidden="true"></span>
+          </label>
+        </div>
+        <div class="settings-option">
+          <div class="setting-option__info">
+            <span class="setting-option__title">Упростить фон</span>
+            <span class="setting-option__desc">Выключает градиенты и оставляет однотонный фон.</span>
+          </div>
+          <label class="switch">
+            <input type="checkbox" data-pref="plainBackground" data-toast="Фон упрощён" />
+            <span class="switch-slider" aria-hidden="true"></span>
+          </label>
+        </div>
+        <div class="settings-option">
+          <div class="setting-option__info">
+            <span class="setting-option__title">Показывать подсказки</span>
+            <span class="setting-option__desc">Скрывайте вспомогательные подсказки и описания, когда они не нужны.</span>
+          </div>
+          <label class="switch">
+            <input type="checkbox" data-pref="showHints" data-toast="Подсказки переключены" />
+            <span class="switch-slider" aria-hidden="true"></span>
+          </label>
+        </div>
+        <div class="settings-option">
+          <div class="setting-option__info">
+            <span class="setting-option__title">Разворачивать инструкции</span>
+            <span class="setting-option__desc">На странице подсказок карточки сразу открыты и не закрываются.</span>
+          </div>
+          <label class="switch">
+            <input type="checkbox" data-pref="expandNews" data-toast="Инструкции раскрываются автоматически" />
+            <span class="switch-slider" aria-hidden="true"></span>
+          </label>
+        </div>
+      </section>
+
+      <section class="card settings-card">
+        <h2>Конфиденциальность профиля</h2>
+        <p class="settings-note">Выберите, кто увидит ваш профиль и материалы.</p>
+        <div class="row">
+          <div class="privacy-control" data-open="false">
+            <button id="privacyToggle" class="ios-button privacy-toggle" type="button" aria-haspopup="listbox" aria-controls="privacyMenu" aria-expanded="false">
+              Публичный
+            </button>
+            <div id="privacyMenu" class="privacy-menu" role="listbox" aria-labelledby="privacyToggle" hidden>
+              <button type="button" class="privacy-option" data-value="public" role="option">Публичный</button>
+              <button type="button" class="privacy-option" data-value="friends" role="option">Только друзьям</button>
+              <button type="button" class="privacy-option" data-value="private" role="option">Закрытый</button>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
   </main>
 
   <script src="{% static 'js/nav.js' %}"></script>

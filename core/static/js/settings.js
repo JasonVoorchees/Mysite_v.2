@@ -1,155 +1,361 @@
 (function(){
-  const load = window.__loadUIPrefs || (()=>({}));
-  const apply = window.__applyUIPrefs || (()=>{});
-  const saved = load();
-  const allowedThemes = ['light','dark','retro','sepia'];
-  function resolveInitialTheme(){
-    const raw = saved && saved.theme;
-    if(allowedThemes.includes(raw)) return raw;
-    if(raw === 'system'){
-      try {
-        return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-      } catch (e) {
-        return 'dark';
-      }
-    }
-    return 'dark';
+  const load = window.__loadUIPrefs || (() => ({}));
+  const apply = window.__applyUIPrefs || (() => {});
+  const PREF_KEY = 'ui_prefs_v1';
+
+  const allowedThemes = ['dark','light','retro','sepia','contrast','system'];
+  const allowedAccents = ['blue','violet','emerald','amber','rose'];
+  const allowedFontFamilies = ['system','serif','rounded','mono'];
+  const allowedLineHeights = ['normal','relaxed','compact'];
+  const allowedDensity = ['cozy','compact','spacious'];
+  const allowedSidebar = ['narrow','normal','wide'];
+  const allowedCardStyles = ['elevated','flat','outline'];
+  const allowedTopbar = ['floating','static','hidden'];
+  const allowedPrivacy = ['public','friends','private'];
+  const booleanPrefs = new Set(['reduceMotion','plainBackground','focusStrong','showHints','expandNews']);
+
+  const defaults = {
+    theme: 'dark',
+    accent: 'blue',
+    fontScale: 1,
+    fontFamily: 'system',
+    lineHeight: 'normal',
+    density: 'cozy',
+    sidebarSize: 'normal',
+    cardStyle: 'elevated',
+    reduceMotion: false,
+    plainBackground: false,
+    focusStrong: false,
+    showHints: true,
+    topbarMode: 'floating',
+    expandNews: false,
+    privacy: 'public',
+  };
+
+  const savedPrefs = load();
+  let storedPrivacy = null;
+  try {
+    storedPrivacy = localStorage.getItem('profile_privacy_v1');
+  } catch (e) {
+    storedPrivacy = null;
   }
-  const state = Object.assign({ theme: resolveInitialTheme(), fontScale:1, privacy:'public' }, saved);
-  state.theme = resolveInitialTheme();
 
-  const fr=document.getElementById('fontRange');
-  const fl=document.getElementById('fontLabel');
-  const trs=document.querySelectorAll('input[name="theme"]');
-  const privacyControl=document.querySelector('.privacy-control');
-  const privacyToggle=document.getElementById('privacyToggle');
-  const privacyMenu=document.getElementById('privacyMenu');
-  const privacyOptions=privacyMenu ? Array.from(privacyMenu.querySelectorAll('.privacy-option')) : [];
-  const privacyMap={public:'Публичный', friends:'Только друзьям', private:'Закрытый'};
+  const state = Object.assign({}, defaults, savedPrefs || {});
+  if (typeof storedPrivacy === 'string' && allowedPrivacy.includes(storedPrivacy)) {
+    state.privacy = storedPrivacy;
+  }
 
-  function ensureToast(){
-  if(document.getElementById('appToast')) return document.getElementById('appToast');
-  const t=document.createElement('div'); t.id='appToast'; t.className='toast'; document.body.appendChild(t); return t;
-}
-function showToast(msg){
-  const t=ensureToast(); t.textContent=msg||'Сохранено'; t.classList.add('show');
-  clearTimeout(window.__toastTimer); window.__toastTimer=setTimeout(()=>t.classList.remove('show'), 2500);
-}
-function save(){ try{ localStorage.setItem('ui_prefs_v1', JSON.stringify({ theme:state.theme, fontScale:state.fontScale })); localStorage.setItem('profile_privacy_v1', state.privacy); showToast('Сохранено'); }catch(e){} }
-  function render(){
-    if(fl) fl.textContent=Math.round((state.fontScale||1)*100)+'%';
-    if(fr) fr.value=Math.round((state.fontScale||1)*100);
-    trs.forEach(x=>x.checked=(x.value===state.theme));
-    if(privacyToggle){
-      const label=privacyMap[state.privacy]||privacyMap.public;
-      privacyToggle.dataset.value=state.privacy;
-      privacyToggle.textContent=label;
+  const fontRange = document.getElementById('fontRange');
+  const fontLabel = document.getElementById('fontLabel');
+  const prefControls = Array.from(document.querySelectorAll('[data-pref]'));
+  const privacyControl = document.querySelector('.privacy-control');
+  const privacyToggle = document.getElementById('privacyToggle');
+  const privacyMenu = document.getElementById('privacyMenu');
+  const privacyOptions = privacyMenu ? Array.from(privacyMenu.querySelectorAll('.privacy-option')) : [];
+  const privacyMap = {
+    public: 'Публичный',
+    friends: 'Только друзьям',
+    private: 'Закрытый',
+  };
+
+  function clampFont(value) {
+    const num = Number(value);
+    if (!Number.isFinite(num)) {
+      return 1;
     }
-    privacyOptions.forEach(btn=>{
-      const isActive=btn.dataset.value===state.privacy;
-      btn.setAttribute('aria-selected', isActive ? 'true' : 'false');
+    return Math.min(1.6, Math.max(0.85, num));
+  }
+
+  function sanitizeState() {
+    if (!allowedThemes.includes(state.theme)) state.theme = defaults.theme;
+    if (!allowedAccents.includes(state.accent)) state.accent = defaults.accent;
+    if (!allowedFontFamilies.includes(state.fontFamily)) state.fontFamily = defaults.fontFamily;
+    if (!allowedLineHeights.includes(state.lineHeight)) state.lineHeight = defaults.lineHeight;
+    if (!allowedDensity.includes(state.density)) state.density = defaults.density;
+    if (!allowedSidebar.includes(state.sidebarSize)) state.sidebarSize = defaults.sidebarSize;
+    if (!allowedCardStyles.includes(state.cardStyle)) state.cardStyle = defaults.cardStyle;
+    if (!allowedTopbar.includes(state.topbarMode)) state.topbarMode = defaults.topbarMode;
+    if (!allowedPrivacy.includes(state.privacy)) state.privacy = defaults.privacy;
+    state.reduceMotion = !!state.reduceMotion;
+    state.plainBackground = !!state.plainBackground;
+    state.focusStrong = !!state.focusStrong;
+    state.showHints = state.showHints !== false;
+    state.expandNews = !!state.expandNews;
+    state.fontScale = clampFont(state.fontScale);
+  }
+
+  sanitizeState();
+
+  function ensureToast() {
+    let toast = document.getElementById('appToast');
+    if (!toast) {
+      toast = document.createElement('div');
+      toast.id = 'appToast';
+      toast.className = 'toast';
+      toast.setAttribute('role', 'status');
+      toast.setAttribute('aria-live', 'polite');
+      document.body.appendChild(toast);
+    }
+    return toast;
+  }
+
+  function showToast(message) {
+    const toast = ensureToast();
+    toast.textContent = message || 'Сохранено';
+    toast.classList.add('show');
+    clearTimeout(window.__toastTimer);
+    window.__toastTimer = window.setTimeout(() => toast.classList.remove('show'), 2500);
+  }
+
+  const UI_PREF_KEYS = [
+    'theme',
+    'fontScale',
+    'accent',
+    'fontFamily',
+    'lineHeight',
+    'density',
+    'sidebarSize',
+    'cardStyle',
+    'reduceMotion',
+    'plainBackground',
+    'focusStrong',
+    'showHints',
+    'topbarMode',
+    'expandNews',
+  ];
+
+  function buildUIPrefs() {
+    const prefs = {};
+    UI_PREF_KEYS.forEach((key) => {
+      prefs[key] = state[key];
+    });
+    return prefs;
+  }
+
+  function persistState() {
+    try {
+      localStorage.setItem(PREF_KEY, JSON.stringify(buildUIPrefs()));
+      localStorage.setItem('profile_privacy_v1', state.privacy);
+    } catch (e) {
+      /* ignore */
+    }
+  }
+
+  function save(toastMessage) {
+    persistState();
+    if (toastMessage === false) return;
+    showToast(typeof toastMessage === 'string' ? toastMessage : 'Сохранено');
+  }
+
+  function saveSilent() {
+    persistState();
+  }
+
+  function render() {
+    const percent = Math.round(state.fontScale * 100);
+    if (fontRange) {
+      fontRange.value = String(percent);
+    }
+    if (fontLabel) {
+      fontLabel.textContent = `${percent}%`;
+    }
+    prefControls.forEach((ctrl) => {
+      const key = ctrl.dataset.pref;
+      if (!(key in state)) return;
+      if (ctrl.tagName === 'SELECT') {
+        ctrl.value = String(state[key]);
+        return;
+      }
+      if (ctrl.type === 'checkbox') {
+        ctrl.checked = !!state[key];
+        return;
+      }
+      if (ctrl.type === 'radio') {
+        ctrl.checked = String(state[key]) === String(ctrl.value);
+        return;
+      }
+      ctrl.value = state[key];
+    });
+    if (privacyToggle) {
+      const label = privacyMap[state.privacy] || privacyMap.public;
+      privacyToggle.dataset.value = state.privacy;
+      privacyToggle.textContent = label;
+      privacyToggle.setAttribute('aria-expanded', privacyControl && privacyControl.dataset.open === 'true' ? 'true' : 'false');
+    }
+    privacyOptions.forEach((btn) => {
+      const active = btn.dataset.value === state.privacy;
+      btn.setAttribute('aria-selected', active ? 'true' : 'false');
     });
     apply(state);
   }
 
-  if(fr){
-    fr.addEventListener('input', ()=>{
-      state.fontScale = Math.max(0.6, Math.min(2, Number(fr.value)/100));
-      // live update CSS var for smooth effect
-      document.documentElement.style.setProperty('--fz-scale', String(state.fontScale));
-      if(fl) fl.textContent = Math.round(state.fontScale*100)+'%';
+  function setPref(key, value, toastMessage) {
+    let changed = false;
+    if (key === 'fontScale') {
+      const normalized = clampFont(value);
+      if (Math.abs(normalized - state.fontScale) > 0.001) {
+        state.fontScale = normalized;
+        changed = true;
+      }
+    } else if (booleanPrefs.has(key)) {
+      const boolVal = !!value;
+      if (state[key] !== boolVal) {
+        state[key] = boolVal;
+        changed = true;
+      }
+    } else if (typeof value === 'string') {
+      if (state[key] !== value) {
+        state[key] = value;
+        changed = true;
+      }
+    } else if (state[key] !== value) {
+      state[key] = value;
+      changed = true;
+    }
+    sanitizeState();
+    if (!changed) {
+      return;
+    }
+    render();
+    save(toastMessage);
+  }
+
+  function setPrivacy(value) {
+    const next = allowedPrivacy.includes(value) ? value : 'public';
+    if (state.privacy === next) {
+      return;
+    }
+    state.privacy = next;
+    render();
+    save(`Конфиденциальность: ${privacyMap[state.privacy] || privacyMap.public}`);
+  }
+
+  if (fontRange) {
+    fontRange.addEventListener('input', () => {
+      const normalized = clampFont(Number(fontRange.value) / 100);
+      document.documentElement.style.setProperty('--fz-scale', String(normalized));
+      if (fontLabel) {
+        fontLabel.textContent = `${Math.round(normalized * 100)}%`;
+      }
     });
-    fr.addEventListener('change', ()=>{ save('Размер сохранён: '+Math.round(state.fontScale*100)+'%'); });
+    fontRange.addEventListener('change', () => {
+      const normalized = clampFont(Number(fontRange.value) / 100);
+      setPref('fontScale', normalized, `Размер сохранён: ${Math.round(normalized * 100)}%`);
+    });
   }
 
-  const themeLabels = {light:'Светлая', dark:'Тёмная', retro:'Ретро', sepia:'Сепия'};
+  prefControls.forEach((ctrl) => {
+    const key = ctrl.dataset.pref;
+    const controlToast = ctrl.dataset.toast;
+    if (ctrl.tagName === 'SELECT') {
+      ctrl.addEventListener('change', () => setPref(key, ctrl.value, controlToast));
+      return;
+    }
+    if (ctrl.type === 'checkbox') {
+      ctrl.addEventListener('change', () => setPref(key, ctrl.checked, controlToast));
+      return;
+    }
+    if (ctrl.type === 'radio') {
+      ctrl.addEventListener('change', () => {
+        if (ctrl.checked) {
+          setPref(key, ctrl.value, ctrl.dataset.toast || controlToast);
+        }
+      });
+    }
+  });
 
-  trs.forEach(x=>x.addEventListener('change',()=>{
-    if(x.checked){ state.theme = x.value; render(); save('Тема: '+(themeLabels[state.theme]||state.theme)); }
-  }));
-
-  function closePrivacyMenu(){
-    if(!privacyControl) return;
-    privacyControl.dataset.open='false';
-    if(privacyToggle){ privacyToggle.setAttribute('aria-expanded','false'); }
-    if(privacyMenu){ privacyMenu.hidden=true; }
+  function focusActivePrivacy() {
+    const active = privacyOptions.find((btn) => btn.dataset.value === state.privacy) || privacyOptions[0];
+    if (active) {
+      active.focus({ preventScroll: true });
+    }
   }
 
-  function focusActivePrivacy(){
-    const active=privacyOptions.find(btn=>btn.dataset.value===state.privacy) || privacyOptions[0];
-    if(active){ active.focus({preventScroll:true}); }
-  }
-
-  function openPrivacyMenu(){
-    if(!privacyControl) return;
-    privacyControl.dataset.open='true';
-    if(privacyToggle){ privacyToggle.setAttribute('aria-expanded','true'); }
-    if(privacyMenu){ privacyMenu.hidden=false; }
+  function openPrivacyMenu() {
+    if (!privacyControl) return;
+    privacyControl.dataset.open = 'true';
+    if (privacyToggle) privacyToggle.setAttribute('aria-expanded', 'true');
+    if (privacyMenu) privacyMenu.hidden = false;
     focusActivePrivacy();
   }
 
-  if(privacyToggle){
-    privacyToggle.addEventListener('click', ()=>{
-      const isOpen=privacyControl && privacyControl.dataset.open==='true';
-      if(isOpen){ closePrivacyMenu(); }
-      else { openPrivacyMenu(); }
+  function closePrivacyMenu() {
+    if (!privacyControl) return;
+    privacyControl.dataset.open = 'false';
+    if (privacyToggle) privacyToggle.setAttribute('aria-expanded', 'false');
+    if (privacyMenu) privacyMenu.hidden = true;
+  }
+
+  if (privacyToggle) {
+    privacyToggle.addEventListener('click', () => {
+      const isOpen = privacyControl && privacyControl.dataset.open === 'true';
+      if (isOpen) closePrivacyMenu();
+      else openPrivacyMenu();
     });
-    privacyToggle.addEventListener('keydown',(ev)=>{
-      if(ev.key==='ArrowDown' || ev.key==='Enter' || ev.key===' '){
+    privacyToggle.addEventListener('keydown', (ev) => {
+      if (ev.key === 'ArrowDown' || ev.key === 'Enter' || ev.key === ' ') {
         ev.preventDefault();
         openPrivacyMenu();
       }
     });
   }
 
-  privacyOptions.forEach(btn=>{
-    btn.addEventListener('click',()=>{
-      state.privacy = btn.dataset.value || 'public';
-      render();
-      save('Конфиденциальность: '+(privacyMap[state.privacy]||state.privacy));
+  privacyOptions.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      setPrivacy(btn.dataset.value || 'public');
       closePrivacyMenu();
-      if(privacyToggle) privacyToggle.focus({preventScroll:true});
+      if (privacyToggle) privacyToggle.focus({ preventScroll: true });
     });
-    btn.addEventListener('keydown',(ev)=>{
-      if(ev.key==='Escape'){ ev.stopPropagation(); closePrivacyMenu(); if(privacyToggle) privacyToggle.focus({preventScroll:true}); return; }
-      if(ev.key==='ArrowDown' || ev.key==='ArrowUp'){
-        ev.preventDefault();
-        const idx=privacyOptions.indexOf(btn);
-        const delta=ev.key==='ArrowDown'?1:-1;
-        const next=privacyOptions[(idx+delta+privacyOptions.length)%privacyOptions.length];
-        if(next) next.focus({preventScroll:true});
+    btn.addEventListener('keydown', (ev) => {
+      if (ev.key === 'Escape') {
+        ev.stopPropagation();
+        closePrivacyMenu();
+        if (privacyToggle) privacyToggle.focus({ preventScroll: true });
+        return;
       }
-      if(ev.key==='Tab'){
+      if (ev.key === 'ArrowDown' || ev.key === 'ArrowUp') {
+        ev.preventDefault();
+        const index = privacyOptions.indexOf(btn);
+        const delta = ev.key === 'ArrowDown' ? 1 : -1;
+        const next = privacyOptions[(index + delta + privacyOptions.length) % privacyOptions.length];
+        if (next) next.focus({ preventScroll: true });
+      }
+      if (ev.key === 'Tab') {
         closePrivacyMenu();
       }
     });
   });
 
-  document.addEventListener('click',(ev)=>{
-    if(!privacyControl || !privacyMenu || privacyMenu.hidden) return;
-    if(ev.target instanceof Node && privacyControl.contains(ev.target)) return;
+  document.addEventListener('click', (ev) => {
+    if (!privacyControl || !privacyMenu || privacyMenu.hidden) return;
+    if (ev.target instanceof Node && privacyControl.contains(ev.target)) return;
     closePrivacyMenu();
   });
 
-  document.addEventListener('keydown',(ev)=>{
-    if(ev.key==='Escape'){ closePrivacyMenu(); }
+  document.addEventListener('keydown', (ev) => {
+    if (ev.key === 'Escape') closePrivacyMenu();
   });
 
-  // initial apply
   render();
+  window.__settingsSaveSilent = saveSilent;
 })();
 
 /* Сохраняем изменения при клике по пунктам сайдбара перед навигацией */
-document.addEventListener('click', (ev)=>{
+document.addEventListener('click', (ev) => {
   const target = ev.target.closest('.side-nav a, .side-nav button, .side-btn');
   if (!target) return;
-  try { saveSilent(); } catch(e){}
-}, {capture:true});
+  const saver = window.__settingsSaveSilent;
+  if (typeof saver === 'function') {
+    try { saver(); } catch (e) {}
+  }
+}, { capture: true });
 
-window.addEventListener('beforeunload', ()=>{
-  try { saveSilent(); } catch(e){}
+window.addEventListener('beforeunload', () => {
+  const saver = window.__settingsSaveSilent;
+  if (typeof saver === 'function') {
+    try { saver(); } catch (e) {}
+  }
 });
-
 
 /* settings-only: hide login button when authed */
 function __settingsIsAuthed(){
