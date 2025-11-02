@@ -9,6 +9,12 @@
     density:'cozy',
     sidebarSize:'normal',
     cardStyle:'elevated',
+    backgroundStyle:'gradient',
+    bodyWeight:'regular',
+    headingFont:'sans',
+    headingStyle:'minimal',
+    headingColor:'auto',
+    textTone:'balanced',
     reduceMotion:false,
     plainBackground:false,
     focusStrong:false,
@@ -16,8 +22,8 @@
     topbarMode:'floating',
     expandNews:false,
   };
-  const themeClasses=['theme-dark','theme-light','theme-retro','theme-sepia','theme-contrast'];
-  const accentClasses=['accent-blue','accent-violet','accent-emerald','accent-amber','accent-rose'];
+  const themeClasses=['theme-dark','theme-light','theme-retro','theme-sepia','theme-contrast','theme-midnight','theme-aurora','theme-pastel'];
+  const accentClasses=['accent-blue','accent-violet','accent-emerald','accent-amber','accent-rose','accent-sky','accent-mint','accent-copper'];
   const fontClasses={system:'font-system',serif:'font-serif',rounded:'font-rounded',mono:'font-mono'};
   const fontClassValues=Object.values(fontClasses);
   const lineClasses={normal:'line-normal',relaxed:'line-relaxed',compact:'line-compact'};
@@ -30,6 +36,18 @@
   const cardValues=Object.values(cardClasses);
   const topbarClasses={floating:'topbar-floating',static:'topbar-static',hidden:'topbar-hidden'};
   const topbarValues=Object.values(topbarClasses);
+  const backgroundClasses={gradient:'background-style-gradient',mesh:'background-style-mesh',soft:'background-style-soft'};
+  const backgroundValues=Object.values(backgroundClasses);
+  const bodyWeightClasses={regular:'text-weight-regular',medium:'text-weight-medium',strong:'text-weight-strong'};
+  const bodyWeightValues=Object.values(bodyWeightClasses);
+  const headingFontClasses={sans:'heading-font-sans',serif:'heading-font-serif',display:'heading-font-display'};
+  const headingFontValues=Object.values(headingFontClasses);
+  const headingStyleClasses={minimal:'heading-style-minimal',soft:'heading-style-soft',caps:'heading-style-caps'};
+  const headingStyleValues=Object.values(headingStyleClasses);
+  const headingColorClasses={auto:null,accent:'heading-color-accent',muted:'heading-color-muted'};
+  const headingColorValues=Object.values(headingColorClasses).filter(Boolean);
+  const textToneClasses={balanced:'text-tone-balanced',soft:'text-tone-soft',bold:'text-tone-bold'};
+  const textToneValues=Object.values(textToneClasses);
 
   function load(){
     try {
@@ -102,6 +120,30 @@
     body.classList.remove(...topbarValues);
     const topbarClass=topbarClasses[prefs.topbarMode] || topbarClasses[DEFAULTS.topbarMode];
     body.classList.add(topbarClass);
+
+    body.classList.remove(...backgroundValues);
+    const backgroundClass=backgroundClasses[prefs.backgroundStyle] || backgroundClasses[DEFAULTS.backgroundStyle];
+    body.classList.add(backgroundClass);
+
+    body.classList.remove(...bodyWeightValues);
+    const bodyWeightClass=bodyWeightClasses[prefs.bodyWeight] || bodyWeightClasses[DEFAULTS.bodyWeight];
+    if(bodyWeightClass){ body.classList.add(bodyWeightClass); }
+
+    body.classList.remove(...headingFontValues);
+    const headingFontClass=headingFontClasses[prefs.headingFont] || headingFontClasses[DEFAULTS.headingFont];
+    if(headingFontClass){ body.classList.add(headingFontClass); }
+
+    body.classList.remove(...headingStyleValues);
+    const headingStyleClass=headingStyleClasses[prefs.headingStyle] || headingStyleClasses[DEFAULTS.headingStyle];
+    if(headingStyleClass){ body.classList.add(headingStyleClass); }
+
+    body.classList.remove(...headingColorValues);
+    const headingColorClass=headingColorClasses[prefs.headingColor] || headingColorClasses[DEFAULTS.headingColor];
+    if(headingColorClass){ body.classList.add(headingColorClass); }
+
+    body.classList.remove(...textToneValues);
+    const toneClass=textToneClasses[prefs.textTone] || textToneClasses[DEFAULTS.textTone];
+    if(toneClass){ body.classList.add(toneClass); }
 
     // Toggles
     body.classList.toggle('reduce-motion', !!prefs.reduceMotion);

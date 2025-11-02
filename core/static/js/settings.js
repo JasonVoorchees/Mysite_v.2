@@ -3,14 +3,20 @@
   const apply = window.__applyUIPrefs || (() => {});
   const PREF_KEY = 'ui_prefs_v1';
 
-  const allowedThemes = ['dark','light','retro','sepia','contrast','system'];
-  const allowedAccents = ['blue','violet','emerald','amber','rose'];
+  const allowedThemes = ['dark','light','retro','sepia','contrast','midnight','aurora','pastel','system'];
+  const allowedAccents = ['blue','violet','emerald','amber','rose','sky','mint','copper'];
   const allowedFontFamilies = ['system','serif','rounded','mono'];
   const allowedLineHeights = ['normal','relaxed','compact'];
   const allowedDensity = ['cozy','compact','spacious'];
   const allowedSidebar = ['narrow','normal','wide'];
   const allowedCardStyles = ['elevated','flat','outline'];
   const allowedTopbar = ['floating','static','hidden'];
+  const allowedBackgrounds = ['gradient','mesh','soft'];
+  const allowedBodyWeight = ['regular','medium','strong'];
+  const allowedHeadingFont = ['sans','serif','display'];
+  const allowedHeadingStyle = ['minimal','soft','caps'];
+  const allowedHeadingColor = ['auto','accent','muted'];
+  const allowedTextTone = ['balanced','soft','bold'];
   const allowedPrivacy = ['public','friends','private'];
   const booleanPrefs = new Set(['reduceMotion','plainBackground','focusStrong','showHints','expandNews']);
 
@@ -23,6 +29,12 @@
     density: 'cozy',
     sidebarSize: 'normal',
     cardStyle: 'elevated',
+    backgroundStyle: 'gradient',
+    bodyWeight: 'regular',
+    headingFont: 'sans',
+    headingStyle: 'minimal',
+    headingColor: 'auto',
+    textTone: 'balanced',
     reduceMotion: false,
     plainBackground: false,
     focusStrong: false,
@@ -75,6 +87,12 @@
     if (!allowedSidebar.includes(state.sidebarSize)) state.sidebarSize = defaults.sidebarSize;
     if (!allowedCardStyles.includes(state.cardStyle)) state.cardStyle = defaults.cardStyle;
     if (!allowedTopbar.includes(state.topbarMode)) state.topbarMode = defaults.topbarMode;
+    if (!allowedBackgrounds.includes(state.backgroundStyle)) state.backgroundStyle = defaults.backgroundStyle;
+    if (!allowedBodyWeight.includes(state.bodyWeight)) state.bodyWeight = defaults.bodyWeight;
+    if (!allowedHeadingFont.includes(state.headingFont)) state.headingFont = defaults.headingFont;
+    if (!allowedHeadingStyle.includes(state.headingStyle)) state.headingStyle = defaults.headingStyle;
+    if (!allowedHeadingColor.includes(state.headingColor)) state.headingColor = defaults.headingColor;
+    if (!allowedTextTone.includes(state.textTone)) state.textTone = defaults.textTone;
     if (!allowedPrivacy.includes(state.privacy)) state.privacy = defaults.privacy;
     state.reduceMotion = !!state.reduceMotion;
     state.plainBackground = !!state.plainBackground;
@@ -116,6 +134,12 @@
     'density',
     'sidebarSize',
     'cardStyle',
+    'backgroundStyle',
+    'bodyWeight',
+    'headingFont',
+    'headingStyle',
+    'headingColor',
+    'textTone',
     'reduceMotion',
     'plainBackground',
     'focusStrong',

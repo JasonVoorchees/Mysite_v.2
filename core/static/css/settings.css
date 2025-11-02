@@ -29,6 +29,9 @@ body.theme-sepia .card.settings-card{box-shadow:0 20px 44px rgba(60,32,18,0.36);
 .accent-option--emerald{--accent-swatch:#30d1b4;}
 .accent-option--amber{--accent-swatch:#f5b25b;}
 .accent-option--rose{--accent-swatch:#ff7fb0;}
+.accent-option--sky{--accent-swatch:#4ecbff;}
+.accent-option--mint{--accent-swatch:#68ffce;}
+.accent-option--copper{--accent-swatch:#ff9454;}
 .settings-option{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:14px 16px;border-radius:16px;background:color-mix(in srgb,var(--card) 88%, transparent);border:1px solid color-mix(in srgb,var(--btn-border) 80%, transparent);transition:background-color .2s ease,border-color .2s ease,box-shadow .2s ease;flex-wrap:wrap}
 .settings-option+ .settings-option{margin-top:12px}
 .settings-option:hover{border-color:color-mix(in srgb,var(--accent) 32%, transparent);box-shadow:0 12px 28px rgba(5,7,18,0.24)}
