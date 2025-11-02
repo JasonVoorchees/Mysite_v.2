@@ -1,0 +1,81 @@
+{% load static %}
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Trezo — сохраните находки красиво</title>
+  <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+  <link rel="stylesheet" href="{% static 'css/modal.css' %}">
+  <script>
+    (function(){
+      try {
+        if (localStorage.getItem('authProfileKey')) {
+          window.location.replace('archive.html');
+        }
+      } catch (e) {}
+    })();
+  </script>
+</head>
+<body class="landing-page">
+  <div class="landing-shell">
+    <header class="landing-top">
+      <a class="landing-brand" href="index.html" aria-label="Trezo — на главную">TREZO</a>
+    </header>
+
+    <main class="landing-main">
+      <section class="landing-hero" aria-label="Приветственный слоган">
+        <p class="landing-hero-line" data-landing-slogan aria-live="polite">Твоя коллекция — в одном месте.</p>
+      </section>
+      <button class="ios-button landing-start" type="button" data-open-auth>Начать</button>
+    </main>
+    <footer class="landing-footer">
+      <a class="landing-top-link" href="news.html">Инструкции по пользованию</a>
+    </footer>
+  </div>
+
+  <div id="authModal" class="modal">
+    <div class="modal-content">
+      <div class="tabs">
+        <button class="tab active" data-tab="login">Войти</button>
+        <button class="tab" data-tab="register">Регистрация</button>
+      </div>
+      <div class="tab-content active" id="login">
+        <input type="text" id="loginUser" placeholder="Логин">
+        <small id="loginAuthError" class="error"></small>
+        <input type="password" id="loginPass" placeholder="Пароль">
+        <button class="btn">Войти</button>
+      </div>
+      <div class="tab-content" id="register">
+        <input type="text" id="regLogin" placeholder="Логин">
+        <small id="loginError" class="error"></small>
+        <input type="password" id="regPass" placeholder="Пароль">
+        <input type="password" id="regPass2" placeholder="Повторите пароль">
+        <small id="passError" class="error"></small>
+        <input type="text" placeholder="Телефон или Email">
+        <button class="btn">Отправить код</button>
+
+        <div id="codeSection" class="code-section hidden">
+          <div class="code-container">
+            <input type="text" maxlength="1" class="code-input">
+            <input type="text" maxlength="1" class="code-input">
+            <input type="text" maxlength="1" class="code-input">
+            <input type="text" maxlength="1" class="code-input">
+            <input type="text" maxlength="1" class="code-input">
+            <input type="text" maxlength="1" class="code-input">
+          </div>
+          <small id="codeError" class="field-error"></small>
+        </div>
+
+        <div class="modal-footer">
+          <button id="registerSubmit" type="button" class="btn ios-button">Зарегистрироваться</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="{% static 'js/landing.js' %}"></script>
+  <script src="{% static 'js/modal.js' %}"></script>
+  <script src="{% static 'js/prefs.js' %}"></script>
+</body>
+</html>

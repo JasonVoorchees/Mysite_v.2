@@ -1,0 +1,23 @@
+{% load static %}
+{% with current=current_section|default:'' %}
+<div class="side-nav-links" role="group" aria-label="Навигация по разделам">
+  {% if current != 'archive' and include_archive|default:True %}
+    <a class="side-btn" href="{% url 'core:archive' %}">Ваш архив</a>
+  {% endif %}
+  {% if current != 'profile' %}
+    <a class="side-btn" href="{% url 'core:profile' %}">Профиль</a>
+  {% endif %}
+  {% if current != 'settings' %}
+    <a class="side-btn" href="{% url 'core:settings' %}">Настройки</a>
+  {% endif %}
+  {% if current != 'market' %}
+    {% include 'includes/market_dropup.html' with current_section=current %}
+  {% endif %}
+  {% if current != 'news' %}
+    <a class="side-btn" href="{% url 'core:news' %}">Тех. информация</a>
+  {% endif %}
+  {% if include_messages %}
+    <a class="side-btn" href="/messages/">Сообщения</a>
+  {% endif %}
+</div>
+{% endwith %}

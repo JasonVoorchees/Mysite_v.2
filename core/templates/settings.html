@@ -1,0 +1,77 @@
+{% load static %}
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Настройки</title>
+  <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+  <link rel="stylesheet" href="{% static 'css/settings.css' %}" />
+</head>
+<body>
+  <aside class="sidebar">
+    <a class="logo" href="index.html" aria-label="На главную">TREZO</a>
+    <nav class="side-nav">
+      <div class="side-nav-footer">
+        {% include 'includes/side_nav_links.html' with current_section='settings' %}
+      </div>
+      <div class="side-nav-divider" aria-hidden="true"></div>
+    </nav>
+  </aside>
+
+  <header class="topbar">
+  <div class="topbar-inner">
+    <div class="logo-wrap">
+      <span class="page-title">Настройки</span>
+    </div>
+
+    <div class="topbar-spacer"></div>
+
+    <div class="topbar-actions">
+      <button class="login-btn" type="button">Войти / Регистрация</button>
+    </div>
+  </div>
+</header>
+
+  <main class="main">
+
+    <section class="card settings-card">
+      <h2>Размер шрифта</h2>
+      <div class="row">
+        <input id="fontRange" type="range" min="85" max="160" step="1" />
+        <span id="fontLabel" class="hint">100%</span>
+      </div>
+    </section>
+
+    <section class="card settings-card">
+      <h2>Тема оформления</h2>
+      <div class="row theme-row">
+        <label class="radio"><input type="radio" name="theme" value="light" /> Светлая</label>
+        <label class="radio"><input type="radio" name="theme" value="dark" /> Тёмная</label>
+        <label class="radio"><input type="radio" name="theme" value="retro" /> Ретро</label>
+        <label class="radio"><input type="radio" name="theme" value="sepia" /> Сепия</label>
+      </div>
+    </section>
+
+    <section class="card settings-card">
+      <h2>Конфиденциальность профиля</h2>
+      <div class="row">
+        <div class="privacy-control" data-open="false">
+          <button id="privacyToggle" class="ios-button privacy-toggle" type="button" aria-haspopup="listbox" aria-controls="privacyMenu" aria-expanded="false">
+            Публичный
+          </button>
+          <div id="privacyMenu" class="privacy-menu" role="listbox" aria-labelledby="privacyToggle" hidden>
+            <button type="button" class="privacy-option" data-value="public" role="option">Публичный</button>
+            <button type="button" class="privacy-option" data-value="friends" role="option">Только друзьям</button>
+            <button type="button" class="privacy-option" data-value="private" role="option">Закрытый</button>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script src="{% static 'js/nav.js' %}"></script>
+  <script src="{% static 'js/prefs.js' %}"></script>
+  <script src="{% static 'js/settings.js' %}"></script>
+</body>
+</html>
