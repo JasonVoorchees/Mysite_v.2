@@ -503,18 +503,6 @@
   })();
 
 
-    // Sidebar filter: show only «Ваши файлы/архив», «Магазин», «Аукцион»
-    (function(){
-      var nav = document.querySelector('.side-nav') || document.querySelector('.sidebar');
-      if (!nav) return;
-      var items = Array.from(nav.querySelectorAll('a,button,li,.side-btn'));
-      items.forEach(function(el){
-        var t = (el.textContent || '').trim().toLowerCase();
-        var keep = /(ваш(и|) (файл|архив))/i.test(t) || t === 'магазин' || t === 'аукцион';
-        if (!keep) { el.style.display = 'none'; }
-      });
-    })();
-
     // Hide auth button on profile page
     document.body.classList.add('profile-page-active');
     const loginBtn=document.querySelector('.login-btn'); if (loginBtn) loginBtn.style.display='none';
