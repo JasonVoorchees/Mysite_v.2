@@ -14,13 +14,7 @@
     <nav class="side-nav">
       <div class="side-nav-divider" aria-hidden="true"></div>
       <div class="side-nav-footer">
-        <div class="side-nav-links" role="group" aria-label="Навигация по разделам">
-          <a class="side-btn" href="{% url 'core:archive' %}">Ваш архив</a>
-          {% include 'includes/market_dropup.html' with current_section='profile' %}
-          <a class="side-btn" href="{% url 'core:settings' %}">Настройки</a>
-          <a class="side-btn" href="{% url 'core:news' %}">Тех. информация</a>
-          <a class="side-btn" href="/messages/">Сообщения</a>
-        </div>
+        {% include 'includes/side_nav_links.html' with current_section='profile' include_messages=True %}
       </div>
     </nav>
   </aside>
