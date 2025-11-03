@@ -1,3 +1,12 @@
+@import url('https://fonts.googleapis.com/css2?family=Lato:wght@400;500;600;700&family=Montserrat:wght@400;500;600;700&family=Playfair+Display:wght@400;500;600&family=Roboto:wght@400;500;700&display=swap');
+
+@font-face{
+  font-family:'Kudry';
+  font-style:normal;
+  font-weight:400;
+  font-display:swap;
+  src:local('Kudry'),local('Kudry Display');
+}
 
 :root{
   --sidebar-w:220px;
@@ -897,6 +906,11 @@ body.font-serif{--ff-base:"Georgia","Times New Roman",serif;}
 body.font-rounded{--ff-base:"Nunito","Segoe UI","Arial Rounded MT Bold",sans-serif;}
 body.font-mono{--ff-base:"IBM Plex Mono","SFMono-Regular","Consolas","Courier New",monospace;}
 body.font-arial{--ff-base:"Arial","Helvetica",sans-serif;}
+body.font-montserrat{--ff-base:"Montserrat","Arial","Helvetica",sans-serif;}
+body.font-roboto{--ff-base:"Roboto","Noto Sans","Helvetica Neue",Arial,sans-serif;}
+body.font-playfair{--ff-base:"Playfair Display","Times New Roman",serif;}
+body.font-lato{--ff-base:"Lato","Segoe UI","Helvetica Neue",Arial,sans-serif;}
+body.font-kudry{--ff-base:"Kudry","PT Sans","Arial",sans-serif;}
 
 body.line-normal{--base-line-height:1.5;}
 body.line-relaxed{--base-line-height:1.7;}

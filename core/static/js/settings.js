@@ -5,7 +5,7 @@
 
   const allowedThemes = ['dark','light','retro','sepia','contrast','midnight','aurora','pastel','system'];
   const allowedAccents = ['blue','violet','emerald','amber','rose','sky','mint','copper'];
-  const allowedFontFamilies = ['system','arial'];
+  const allowedFontFamilies = ['system','arial','montserrat','roboto','playfair','lato','kudry'];
   const allowedLineHeights = ['normal','relaxed','compact'];
   const allowedDensity = ['cozy','compact','spacious'];
   const allowedSidebar = ['narrow','normal','wide'];
@@ -169,10 +169,6 @@
     persistState();
     if (toastMessage === false) return;
     showToast(typeof toastMessage === 'string' ? toastMessage : 'Сохранено');
-  }
-
-  function saveSilent() {
-    persistState();
   }
 
   function render() {
@@ -361,7 +357,7 @@
   });
 
   render();
-  window.__settingsSaveSilent = saveSilent;
+  window.__settingsSaveSilent = () => save(false);
 })();
 
 /* Сохраняем изменения при клике по пунктам сайдбара перед навигацией */

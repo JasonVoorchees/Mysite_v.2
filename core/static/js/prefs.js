@@ -27,6 +27,11 @@
   const fontStacks={
     system:'-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif',
     arial:'"Arial","Helvetica",sans-serif',
+    montserrat:'"Montserrat","Arial","Helvetica",sans-serif',
+    roboto:'"Roboto","Noto Sans","Helvetica Neue",Arial,sans-serif',
+    playfair:'"Playfair Display","Times New Roman",serif',
+    lato:'"Lato","Segoe UI","Helvetica Neue",Arial,sans-serif',
+    kudry:'"Kudry","PT Sans","Arial",sans-serif',
   };
   const lineClasses={normal:'line-normal',relaxed:'line-relaxed',compact:'line-compact'};
   const lineClassValues=Object.values(lineClasses);
@@ -98,7 +103,7 @@
     else { body.classList.add('accent-'+DEFAULTS.accent); }
 
     // Typography
-    body.classList.remove('font-system','font-serif','font-rounded','font-mono','font-arial');
+    body.classList.remove('font-system','font-serif','font-rounded','font-mono','font-arial','font-montserrat','font-roboto','font-playfair','font-lato','font-kudry');
     const fontKey = typeof prefs.fontFamily === 'string' ? prefs.fontFamily : DEFAULTS.fontFamily;
     const fontStack = fontStacks[fontKey] || fontStacks[DEFAULTS.fontFamily];
     document.documentElement.style.setProperty('--ff-base', fontStack);
