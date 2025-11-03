@@ -59,7 +59,7 @@
 
   const fontRange = document.getElementById('fontRange');
   const fontLabel = document.getElementById('fontLabel');
-  const prefControls = Array.from(document.querySelectorAll('[data-pref]'));
+  const prefControls = Array.from(document.querySelectorAll('input[data-pref], select[data-pref]'));
   const privacyControl = document.querySelector('.privacy-control');
   const privacyToggle = document.getElementById('privacyToggle');
   const privacyMenu = document.getElementById('privacyMenu');
@@ -77,6 +77,20 @@
     }
     return Math.min(1.6, Math.max(0.85, num));
   }
+
+  const dropdownControls = Array.from(document.querySelectorAll('.pref-dropdown[data-pref]')).map((control) => {
+    const key = control.dataset.pref;
+    const toggle = control.querySelector('.pref-dropdown__toggle');
+    const menu = control.querySelector('.pref-dropdown__menu');
+    const options = menu ? Array.from(menu.querySelectorAll('.pref-dropdown__option')) : [];
+    options.forEach((opt, index) => {
+      if (!opt.id) {
+        opt.id = `${key}Option${index}`;
+      }
+    });
+    return { key, control, toggle, menu, options, toast: control.dataset.toast || (toggle ? toggle.dataset.toast : undefined) };
+  });
+  let activeDropdown = null;
 
   function sanitizeState() {
     if (!allowedThemes.includes(state.theme)) state.theme = defaults.theme;
@@ -206,6 +220,31 @@
       const active = btn.dataset.value === state.privacy;
       btn.setAttribute('aria-selected', active ? 'true' : 'false');
     });
+    dropdownControls.forEach((dropdown) => {
+      const { key, control, toggle, menu, options } = dropdown;
+      if (!toggle || !options.length) return;
+      const current = state[key];
+      const activeOption = options.find((opt) => (opt.dataset.value || '') === String(current)) || options[0];
+      if (activeOption) {
+        toggle.textContent = activeOption.textContent.trim();
+        toggle.dataset.value = activeOption.dataset.value || '';
+      }
+      options.forEach((opt) => {
+        const isActive = opt === activeOption;
+        opt.setAttribute('aria-selected', isActive ? 'true' : 'false');
+      });
+      if (menu) {
+        menu.setAttribute('aria-activedescendant', activeOption ? activeOption.id || '' : '');
+        if (control.dataset.open === 'true') {
+          menu.hidden = false;
+        } else {
+          menu.hidden = true;
+        }
+      }
+      if (toggle) {
+        toggle.setAttribute('aria-expanded', control.dataset.open === 'true' ? 'true' : 'false');
+      }
+    });
     apply(state);
   }
 
@@ -284,6 +323,114 @@
     }
   });
 
+  function focusDropdownOption(dropdown, option) {
+    if (!option) return;
+    option.focus({ preventScroll: true });
+    if (dropdown && dropdown.menu) {
+      dropdown.menu.setAttribute('aria-activedescendant', option.id || '');
+    }
+  }
+
+  function focusActiveDropdownOption(dropdown) {
+    if (!dropdown) return;
+    const { options, key } = dropdown;
+    if (!options || !options.length) return;
+    const current = state[key];
+    const active = options.find((opt) => (opt.dataset.value || '') === String(current)) || options[0];
+    focusDropdownOption(dropdown, active);
+  }
+
+  function openDropdownMenu(dropdown) {
+    if (!dropdown || !dropdown.control || !dropdown.toggle || !dropdown.menu) return;
+    if (activeDropdown && activeDropdown !== dropdown) {
+      closeDropdownMenu(activeDropdown);
+    }
+    closePrivacyMenu();
+    dropdown.control.dataset.open = 'true';
+    dropdown.toggle.setAttribute('aria-expanded', 'true');
+    dropdown.menu.hidden = false;
+    activeDropdown = dropdown;
+    focusActiveDropdownOption(dropdown);
+  }
+
+  function closeDropdownMenu(dropdown, restoreFocus) {
+    if (!dropdown || !dropdown.control) return;
+    dropdown.control.dataset.open = 'false';
+    if (dropdown.toggle) dropdown.toggle.setAttribute('aria-expanded', 'false');
+    if (dropdown.menu) dropdown.menu.hidden = true;
+    if (restoreFocus && dropdown.toggle) {
+      dropdown.toggle.focus({ preventScroll: true });
+    }
+    if (activeDropdown === dropdown) {
+      activeDropdown = null;
+    }
+  }
+
+  function closeActiveDropdown() {
+    if (activeDropdown) {
+      closeDropdownMenu(activeDropdown);
+    }
+  }
+
+  dropdownControls.forEach((dropdown) => {
+    const { control, toggle, menu, options, key, toast } = dropdown;
+    if (!control || !toggle || !menu || !options.length) return;
+    toggle.addEventListener('click', () => {
+      const isOpen = control.dataset.open === 'true';
+      if (isOpen) closeDropdownMenu(dropdown);
+      else openDropdownMenu(dropdown);
+    });
+    toggle.addEventListener('keydown', (ev) => {
+      if (ev.key === 'ArrowDown' || ev.key === 'Enter' || ev.key === ' ') {
+        ev.preventDefault();
+        if (control.dataset.open === 'true') {
+          focusActiveDropdownOption(dropdown);
+        } else {
+          openDropdownMenu(dropdown);
+        }
+      }
+      if (ev.key === 'ArrowUp') {
+        ev.preventDefault();
+        if (control.dataset.open !== 'true') {
+          openDropdownMenu(dropdown);
+        }
+        focusActiveDropdownOption(dropdown);
+      }
+    });
+    options.forEach((option, index) => {
+      option.addEventListener('click', () => {
+        closeDropdownMenu(dropdown, true);
+        const optionToast = option.dataset.toast || toast;
+        setPref(key, option.dataset.value || '', optionToast);
+      });
+      option.addEventListener('keydown', (ev) => {
+        if (ev.key === 'Escape') {
+          ev.stopPropagation();
+          closeDropdownMenu(dropdown, true);
+          return;
+        }
+        if (ev.key === 'Tab') {
+          closeDropdownMenu(dropdown);
+          return;
+        }
+        if (ev.key === 'ArrowDown' || ev.key === 'ArrowUp') {
+          ev.preventDefault();
+          const delta = ev.key === 'ArrowDown' ? 1 : -1;
+          const next = options[(index + delta + options.length) % options.length];
+          focusDropdownOption(dropdown, next);
+        }
+        if (ev.key === 'Home') {
+          ev.preventDefault();
+          focusDropdownOption(dropdown, options[0]);
+        }
+        if (ev.key === 'End') {
+          ev.preventDefault();
+          focusDropdownOption(dropdown, options[options.length - 1]);
+        }
+      });
+    });
+  });
+
   function focusActivePrivacy() {
     const active = privacyOptions.find((btn) => btn.dataset.value === state.privacy) || privacyOptions[0];
     if (active) {
@@ -293,6 +440,7 @@
 
   function openPrivacyMenu() {
     if (!privacyControl) return;
+    closeActiveDropdown();
     privacyControl.dataset.open = 'true';
     if (privacyToggle) privacyToggle.setAttribute('aria-expanded', 'true');
     if (privacyMenu) privacyMenu.hidden = false;
@@ -347,13 +495,25 @@
   });
 
   document.addEventListener('click', (ev) => {
-    if (!privacyControl || !privacyMenu || privacyMenu.hidden) return;
-    if (ev.target instanceof Node && privacyControl.contains(ev.target)) return;
-    closePrivacyMenu();
+    const target = ev.target instanceof Node ? ev.target : null;
+    if (privacyControl && privacyMenu && !privacyMenu.hidden) {
+      if (!target || !privacyControl.contains(target)) {
+        closePrivacyMenu();
+      }
+    }
+    if (activeDropdown && target) {
+      const { control } = activeDropdown;
+      if (!control || !control.contains(target)) {
+        closeDropdownMenu(activeDropdown);
+      }
+    }
   });
 
   document.addEventListener('keydown', (ev) => {
-    if (ev.key === 'Escape') closePrivacyMenu();
+    if (ev.key === 'Escape') {
+      closePrivacyMenu();
+      closeActiveDropdown();
+    }
   });
 
   render();

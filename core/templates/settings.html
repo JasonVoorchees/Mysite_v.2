@@ -94,14 +94,14 @@
           <h2>Конфиденциальность профиля</h2>
           <p class="settings-note">Выберите, кто увидит ваш профиль и материалы.</p>
           <div class="row">
-            <div class="privacy-control" data-open="false">
-              <button id="privacyToggle" class="ios-button privacy-toggle" type="button" aria-haspopup="listbox" aria-controls="privacyMenu" aria-expanded="false">
+            <div class="privacy-control pref-dropdown" data-open="false">
+              <button id="privacyToggle" class="ios-button privacy-toggle pref-dropdown__toggle" type="button" aria-haspopup="listbox" aria-controls="privacyMenu" aria-expanded="false">
                 Публичный
               </button>
-              <div id="privacyMenu" class="privacy-menu" role="listbox" aria-labelledby="privacyToggle" hidden>
-                <button type="button" class="privacy-option" data-value="public" role="option">Публичный</button>
-                <button type="button" class="privacy-option" data-value="friends" role="option">Только друзьям</button>
-                <button type="button" class="privacy-option" data-value="private" role="option">Закрытый</button>
+              <div id="privacyMenu" class="privacy-menu pref-dropdown__menu" role="listbox" aria-labelledby="privacyToggle" hidden>
+                <button type="button" class="privacy-option pref-dropdown__option" data-value="public" role="option">Публичный</button>
+                <button type="button" class="privacy-option pref-dropdown__option" data-value="friends" role="option">Только друзьям</button>
+                <button type="button" class="privacy-option pref-dropdown__option" data-value="private" role="option">Закрытый</button>
               </div>
             </div>
           </div>
@@ -198,12 +198,15 @@
             <span class="setting-option__title">Плотность интерфейса</span>
             <span class="setting-option__desc">Уменьшает или увеличивает отступы и расстояние между блоками.</span>
           </div>
-          <div class="select-control">
-            <select data-pref="density" data-toast="Плотность обновлена">
-              <option value="cozy">Стандартная</option>
-              <option value="compact">Компактная</option>
-              <option value="spacious">Воздушная</option>
-            </select>
+          <div class="pref-dropdown settings-dropdown" data-pref="density" data-toast="Плотность обновлена" data-open="false">
+            <button id="densityToggle" class="pref-dropdown__toggle" type="button" aria-haspopup="listbox" aria-controls="densityMenu" aria-expanded="false">
+              Стандартная
+            </button>
+            <div id="densityMenu" class="pref-dropdown__menu" role="listbox" aria-labelledby="densityToggle" hidden>
+              <button type="button" class="pref-dropdown__option" data-value="cozy" role="option">Стандартная</button>
+              <button type="button" class="pref-dropdown__option" data-value="compact" role="option">Компактная</button>
+              <button type="button" class="pref-dropdown__option" data-value="spacious" role="option">Воздушная</button>
+            </div>
           </div>
         </div>
         <div class="settings-option">
@@ -211,12 +214,15 @@
             <span class="setting-option__title">Ширина боковой панели</span>
             <span class="setting-option__desc">Подберите комфортную ширину навигации.</span>
           </div>
-          <div class="select-control">
-            <select data-pref="sidebarSize" data-toast="Ширина меню обновлена">
-              <option value="narrow">Узкая</option>
-              <option value="normal">Стандартная</option>
-              <option value="wide">Расширенная</option>
-            </select>
+          <div class="pref-dropdown settings-dropdown" data-pref="sidebarSize" data-toast="Ширина меню обновлена" data-open="false">
+            <button id="sidebarToggle" class="pref-dropdown__toggle" type="button" aria-haspopup="listbox" aria-controls="sidebarMenu" aria-expanded="false">
+              Стандартная
+            </button>
+            <div id="sidebarMenu" class="pref-dropdown__menu" role="listbox" aria-labelledby="sidebarToggle" hidden>
+              <button type="button" class="pref-dropdown__option" data-value="narrow" role="option">Узкая</button>
+              <button type="button" class="pref-dropdown__option" data-value="normal" role="option">Стандартная</button>
+              <button type="button" class="pref-dropdown__option" data-value="wide" role="option">Расширенная</button>
+            </div>
           </div>
         </div>
         <div class="settings-option">
@@ -224,12 +230,15 @@
             <span class="setting-option__title">Поведение верхней панели</span>
             <span class="setting-option__desc">Закрепите панель или сделайте её статичной.</span>
           </div>
-          <div class="select-control">
-            <select data-pref="topbarMode" data-toast="Верхняя панель обновлена">
-              <option value="floating">Всегда на виду</option>
-              <option value="static">Статично вверху</option>
-              <option value="hidden">Скрыть панель</option>
-            </select>
+          <div class="pref-dropdown settings-dropdown" data-pref="topbarMode" data-toast="Верхняя панель обновлена" data-open="false">
+            <button id="topbarToggle" class="pref-dropdown__toggle" type="button" aria-haspopup="listbox" aria-controls="topbarMenu" aria-expanded="false">
+              Всегда на виду
+            </button>
+            <div id="topbarMenu" class="pref-dropdown__menu" role="listbox" aria-labelledby="topbarToggle" hidden>
+              <button type="button" class="pref-dropdown__option" data-value="floating" role="option">Всегда на виду</button>
+              <button type="button" class="pref-dropdown__option" data-value="static" role="option">Статично вверху</button>
+              <button type="button" class="pref-dropdown__option" data-value="hidden" role="option">Скрыть панель</button>
+            </div>
           </div>
         </div>
       </section>
