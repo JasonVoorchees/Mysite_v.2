@@ -5,7 +5,7 @@
 
   const allowedThemes = ['dark','light','retro','sepia','contrast','midnight','aurora','pastel','system'];
   const allowedAccents = ['blue','violet','emerald','amber','rose','sky','mint','copper'];
-  const allowedFontFamilies = ['system','serif','rounded','mono'];
+  const allowedFontFamilies = ['system','arial'];
   const allowedLineHeights = ['normal','relaxed','compact'];
   const allowedDensity = ['cozy','compact','spacious'];
   const allowedSidebar = ['narrow','normal','wide'];

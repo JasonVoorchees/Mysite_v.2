@@ -24,8 +24,10 @@
   };
   const themeClasses=['theme-dark','theme-light','theme-retro','theme-sepia','theme-contrast','theme-midnight','theme-aurora','theme-pastel'];
   const accentClasses=['accent-blue','accent-violet','accent-emerald','accent-amber','accent-rose','accent-sky','accent-mint','accent-copper'];
-  const fontClasses={system:'font-system',serif:'font-serif',rounded:'font-rounded',mono:'font-mono'};
-  const fontClassValues=Object.values(fontClasses);
+  const fontStacks={
+    system:'-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif',
+    arial:'"Arial","Helvetica",sans-serif',
+  };
   const lineClasses={normal:'line-normal',relaxed:'line-relaxed',compact:'line-compact'};
   const lineClassValues=Object.values(lineClasses);
   const densityClasses={cozy:'density-cozy',compact:'density-compact',spacious:'density-spacious'};
@@ -96,9 +98,10 @@
     else { body.classList.add('accent-'+DEFAULTS.accent); }
 
     // Typography
-    body.classList.remove(...fontClassValues);
-    const fontClass=fontClasses[prefs.fontFamily] || fontClasses[DEFAULTS.fontFamily];
-    body.classList.add(fontClass);
+    body.classList.remove('font-system','font-serif','font-rounded','font-mono','font-arial');
+    const fontKey = typeof prefs.fontFamily === 'string' ? prefs.fontFamily : DEFAULTS.fontFamily;
+    const fontStack = fontStacks[fontKey] || fontStacks[DEFAULTS.fontFamily];
+    document.documentElement.style.setProperty('--ff-base', fontStack);
 
     body.classList.remove(...lineClassValues);
     const lineClass=lineClasses[prefs.lineHeight] || lineClasses[DEFAULTS.lineHeight];

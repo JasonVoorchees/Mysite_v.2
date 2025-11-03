@@ -8,7 +8,7 @@
   <link rel="stylesheet" href="{% static 'css/style.css' %}" />
   <link rel="stylesheet" href="{% static 'css/settings.css' %}" />
 </head>
-<body>
+<body class="settings-page">
   <aside class="sidebar">
     <a class="logo" href="index.html" aria-label="На главную">TREZO</a>
     <nav class="side-nav">
@@ -120,12 +120,11 @@
           </div>
 
           <div class="settings-group">
-            <h3 class="settings-subtitle">Семейство шрифта</h3>
+            <h3 class="settings-subtitle">Шрифт интерфейса</h3>
+            <p class="settings-note">Выберите шрифт с поддержкой кириллицы для всех разделов.</p>
             <div class="row theme-row">
               <label class="radio"><input type="radio" name="fontFamily" value="system" data-pref="fontFamily" data-toast="Шрифт: системный" /> Системный</label>
-              <label class="radio"><input type="radio" name="fontFamily" value="serif" data-pref="fontFamily" data-toast="Шрифт: с засечками" /> Классический</label>
-              <label class="radio"><input type="radio" name="fontFamily" value="rounded" data-pref="fontFamily" data-toast="Шрифт: округлый" /> Округлый</label>
-              <label class="radio"><input type="radio" name="fontFamily" value="mono" data-pref="fontFamily" data-toast="Шрифт: моноширинный" /> Моноширинный</label>
+              <label class="radio"><input type="radio" name="fontFamily" value="arial" data-pref="fontFamily" data-toast="Шрифт: Arial" /> Arial</label>
             </div>
           </div>
 
