@@ -91,6 +91,23 @@
         </section>
 
         <section class="card settings-card">
+          <h2>Конфиденциальность профиля</h2>
+          <p class="settings-note">Выберите, кто увидит ваш профиль и материалы.</p>
+          <div class="row">
+            <div class="privacy-control" data-open="false">
+              <button id="privacyToggle" class="ios-button privacy-toggle" type="button" aria-haspopup="listbox" aria-controls="privacyMenu" aria-expanded="false">
+                Публичный
+              </button>
+              <div id="privacyMenu" class="privacy-menu" role="listbox" aria-labelledby="privacyToggle" hidden>
+                <button type="button" class="privacy-option" data-value="public" role="option">Публичный</button>
+                <button type="button" class="privacy-option" data-value="friends" role="option">Только друзьям</button>
+                <button type="button" class="privacy-option" data-value="private" role="option">Закрытый</button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="card settings-card">
           <h2>Типографика</h2>
 
           <div class="settings-group">
@@ -177,33 +194,39 @@
             <span class="setting-option__title">Плотность интерфейса</span>
             <span class="setting-option__desc">Уменьшает или увеличивает отступы и расстояние между блоками.</span>
           </div>
-          <select data-pref="density" data-toast="Плотность обновлена">
-            <option value="cozy">Стандартная</option>
-            <option value="compact">Компактная</option>
-            <option value="spacious">Воздушная</option>
-          </select>
+          <div class="select-control">
+            <select data-pref="density" data-toast="Плотность обновлена">
+              <option value="cozy">Стандартная</option>
+              <option value="compact">Компактная</option>
+              <option value="spacious">Воздушная</option>
+            </select>
+          </div>
         </div>
         <div class="settings-option">
           <div class="setting-option__info">
             <span class="setting-option__title">Ширина боковой панели</span>
             <span class="setting-option__desc">Подберите комфортную ширину навигации.</span>
           </div>
-          <select data-pref="sidebarSize" data-toast="Ширина меню обновлена">
-            <option value="narrow">Узкая</option>
-            <option value="normal">Стандартная</option>
-            <option value="wide">Расширенная</option>
-          </select>
+          <div class="select-control">
+            <select data-pref="sidebarSize" data-toast="Ширина меню обновлена">
+              <option value="narrow">Узкая</option>
+              <option value="normal">Стандартная</option>
+              <option value="wide">Расширенная</option>
+            </select>
+          </div>
         </div>
         <div class="settings-option">
           <div class="setting-option__info">
             <span class="setting-option__title">Поведение верхней панели</span>
             <span class="setting-option__desc">Закрепите панель или сделайте её статичной.</span>
           </div>
-          <select data-pref="topbarMode" data-toast="Верхняя панель обновлена">
-            <option value="floating">Всегда на виду</option>
-            <option value="static">Статично вверху</option>
-            <option value="hidden">Скрыть панель</option>
-          </select>
+          <div class="select-control">
+            <select data-pref="topbarMode" data-toast="Верхняя панель обновлена">
+              <option value="floating">Всегда на виду</option>
+              <option value="static">Статично вверху</option>
+              <option value="hidden">Скрыть панель</option>
+            </select>
+          </div>
         </div>
       </section>
 
@@ -258,23 +281,6 @@
             <input type="checkbox" data-pref="expandNews" data-toast="Инструкции раскрываются автоматически" />
             <span class="switch-slider" aria-hidden="true"></span>
           </label>
-        </div>
-      </section>
-
-      <section class="card settings-card">
-        <h2>Конфиденциальность профиля</h2>
-        <p class="settings-note">Выберите, кто увидит ваш профиль и материалы.</p>
-        <div class="row">
-          <div class="privacy-control" data-open="false">
-            <button id="privacyToggle" class="ios-button privacy-toggle" type="button" aria-haspopup="listbox" aria-controls="privacyMenu" aria-expanded="false">
-              Публичный
-            </button>
-            <div id="privacyMenu" class="privacy-menu" role="listbox" aria-labelledby="privacyToggle" hidden>
-              <button type="button" class="privacy-option" data-value="public" role="option">Публичный</button>
-              <button type="button" class="privacy-option" data-value="friends" role="option">Только друзьям</button>
-              <button type="button" class="privacy-option" data-value="private" role="option">Закрытый</button>
-            </div>
-          </div>
         </div>
       </section>
     </div>
