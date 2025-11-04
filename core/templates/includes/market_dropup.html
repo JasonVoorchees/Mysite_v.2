@@ -1,6 +1,6 @@
 {% with current=current_section|default:"" %}
-<div class="market-dropup" data-market-dropup>
-  <button class="side-btn nav-market{% if current == 'market' %} active{% endif %}" type="button" aria-haspopup="true" aria-expanded="false">
+<div class="market-dropup{% if current == 'market' %} market-dropup--active{% endif %}" data-market-dropup>
+  <button class="side-btn nav-market{% if current == 'market' %} active{% endif %}" type="button" aria-haspopup="true" aria-expanded="false"{% if current == 'market' %} aria-current="page"{% endif %}>
     Маркет
   </button>
   <div class="market-dropup__list" data-market-list hidden role="menu">

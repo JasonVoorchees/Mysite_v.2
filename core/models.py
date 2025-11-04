@@ -1,6 +1,12 @@
 """Replaces the original Java entity classes with Django ORM models."""
+import json
+
 from django.conf import settings
+from django.core.exceptions import ValidationError
 from django.db import models
+from django.utils import timezone
+
+from core.utils import moderation
 
 
 class Profile(models.Model):
@@ -11,9 +17,27 @@ class Profile(models.Model):
     avatar = models.ImageField(upload_to='avatars/', blank=True, null=True)
     avatar_meta = models.JSONField(default=dict, blank=True)
     privacy_level = models.CharField(max_length=50, default='public')
+    link = models.CharField(max_length=255, blank=True, default='')
+    terms_version_accepted = models.CharField(max_length=20, blank=True, default='')
+    terms_accepted_at = models.DateTimeField(blank=True, null=True)
+    terms_accepted_ip = models.GenericIPAddressField(blank=True, null=True)
 
     def __str__(self) -> str:  # pragma: no cover
         return self.display_name or self.user.get_username()
+
+    def clean(self) -> None:
+        if self.avatar:
+            moderation.validate_uploaded_file(self.avatar)
+
+    def mark_terms_accepted(self, *, ip: str | None = None) -> None:
+        self.terms_version_accepted = settings.TERMS_VERSION
+        self.terms_accepted_at = timezone.now()
+        if ip:
+            self.terms_accepted_ip = ip
+        self.save(update_fields=['terms_version_accepted', 'terms_accepted_at', 'terms_accepted_ip'])
+
+    def has_accepted_terms(self) -> bool:
+        return (self.terms_version_accepted or '') == settings.TERMS_VERSION
 
 
 class Rubric(models.Model):
@@ -33,21 +57,78 @@ class Rubric(models.Model):
     def __str__(self) -> str:  # pragma: no cover
         return self.name
 
+    def clean(self) -> None:
+        if self.name:
+            moderation.ensure_text_allowed(self.name, field='name')
+
 
 class ArchiveFile(models.Model):
     """Stores archive items, replacing the Java ArchiveFile entity."""
 
     rubric = models.ForeignKey(Rubric, on_delete=models.CASCADE, related_name='files')
+    owner = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name='archive_files',
+    )
     title = models.CharField(max_length=255)
+    normalized_title = models.CharField(max_length=255, blank=True, default='')
+    content_hash = models.CharField(max_length=64, blank=True, default='')
     data = models.JSONField(default=dict)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
         ordering = ['-created_at']
+        constraints = [
+            models.UniqueConstraint(
+                fields=['owner', 'normalized_title'],
+                name='uniq_archive_owner_title',
+            ),
+            models.UniqueConstraint(
+                fields=['owner', 'content_hash'],
+                name='uniq_archive_owner_hash',
+            ),
+        ]
 
     def __str__(self) -> str:  # pragma: no cover
         return self.title
+
+    def update_signatures(self) -> None:
+        if self.rubric and self.rubric_id and self.rubric.profile_id:
+            self.owner = self.rubric.profile.user
+        self.normalized_title = moderation.normalise_text(self.title)
+        try:
+            data_value = self.data
+        except AttributeError:  # pragma: no cover - guard for weird JSONField usage
+            data_value = {}
+        self.content_hash = moderation.compute_content_hash(self.title, data_value)
+
+    def clean(self) -> None:
+        errors: dict[str, list[str]] = {}
+        try:
+            moderation.ensure_text_allowed(self.title, field='title')
+        except ValidationError as exc:
+            errors.setdefault('title', []).extend(exc.messages)
+
+        try:
+            payload = json.dumps(self.data, ensure_ascii=False) if isinstance(self.data, (dict, list)) else str(self.data)
+            moderation.ensure_text_allowed(payload, field='data')
+        except (TypeError, ValueError):
+            pass
+        except ValidationError as exc:
+            errors.setdefault('data', []).extend(exc.messages)
+
+        if errors:
+            raise ValidationError(errors)
+
+    def full_clean(self, *args, **kwargs) -> None:
+        self.update_signatures()
+        super().full_clean(*args, **kwargs)
+
+    def save(self, *args, **kwargs) -> None:
+        self.update_signatures()
+        super().save(*args, **kwargs)
 
 
 class ArchiveFileImage(models.Model):
@@ -63,3 +144,7 @@ class ArchiveFileImage(models.Model):
 
     def __str__(self) -> str:  # pragma: no cover
         return f"{self.archive_file}: {self.display_order}"
+
+    def clean(self) -> None:
+        if self.image:
+            moderation.validate_uploaded_file(self.image)

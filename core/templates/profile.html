@@ -14,13 +14,7 @@
     <nav class="side-nav">
       <div class="side-nav-divider" aria-hidden="true"></div>
       <div class="side-nav-footer">
-        <div class="side-nav-links" role="group" aria-label="Навигация по разделам">
-          <a class="side-btn" href="{% url 'core:archive' %}">Ваш архив</a>
-          {% include 'includes/market_dropup.html' with current_section='profile' %}
-          <a class="side-btn" href="{% url 'core:settings' %}">Настройки</a>
-          <a class="side-btn" href="{% url 'core:news' %}">Тех. информация</a>
-          <a class="side-btn" href="/messages/">Сообщения</a>
-        </div>
+        {% include 'includes/side_nav_links.html' with current_section='profile' include_messages=True %}
       </div>
     </nav>
   </aside>
@@ -48,6 +42,7 @@
           <div><strong>Фамилия:</strong> <span data-f="last">—</span></div>
           <div><strong>Город:</strong> <span data-f="city">—</span></div>
           <div><strong>Почта:</strong> <span data-f="email">—</span></div>
+          <div><strong>Ссылка:</strong> <span data-f="link" class="profile-link-value">—</span></div>
           <div><strong>Телефон:</strong> <span data-f="phone">—</span></div>
           <div><strong>Интересы:</strong> <span data-f="interests">—</span></div>
         </div>
@@ -100,6 +95,7 @@
             <input id="pe_last"  placeholder="Фамилия">
             <input id="pe_city"  placeholder="Город">
             <input id="pe_email" placeholder="Почта">
+            <input id="pe_link" placeholder="Ссылка" class="full">
             <input id="pe_phone" placeholder="Телефон">
             <textarea id="pe_interests" placeholder="Интересы" class="full"></textarea>
           </div>
@@ -125,5 +121,6 @@
   <script src="{% static 'js/nav.js' %}"></script>
   <script src="{% static 'js/profile.js' %}"></script>
   <script src="{% static 'js/prefs.js' %}"></script>
+  {% include 'includes/terms_modal.html' %}
 </body>
 </html>

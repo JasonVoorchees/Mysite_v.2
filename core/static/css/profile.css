@@ -1,6 +1,6 @@
 
 /* minimal reset for plain profile */
-.profile-wrap{max-width:1200px;margin: 60px auto 40px;;padding:0 28px}
+.profile-wrap{max-width:1200px;margin:60px auto 40px;padding:0 var(--page-padding, var(--gap,28px));}
 .profile-plain{background:transparent;border:0;padding:0;box-shadow:none}
 .profile-header{display:flex;align-items:flex-start;gap:16px;margin-bottom:12px;width:100%}
 .profile-header__main{display:flex;align-items:center;gap:12px;min-width:0}
@@ -11,7 +11,13 @@
 .profile-login{font-size:18px;font-weight:600;line-height:1.3;color:inherit;min-height:1.4em;word-break:break-word}
 .profile-login[data-state="empty"]{color:var(--muted);font-weight:500}
 .profile-view > div{margin:4px 0;font-size:16px;color:inherit}
-.profile-footer-actions{display:flex;gap:8px;justify-content:flex-start;margin-top:14px}
+.profile-link-value{display:inline-block;min-height:1.4em;word-break:break-word}
+.profile-link-value--has-link{display:inline-flex;align-items:center;gap:6px}
+.profile-link-value .profile-link{color:var(--accent);text-decoration:none;font-weight:500;transition:color .2s ease,text-shadow .2s ease;word-break:break-word}
+.profile-link-value .profile-link:hover,
+.profile-link-value .profile-link:focus-visible{color:color-mix(in srgb, var(--accent) 80%, var(--card-fg, #fff) 20%);text-shadow:0 0 .65rem color-mix(in srgb, var(--accent) 35%, transparent);outline:none}
+.profile-link-value .profile-link:focus-visible{outline:2px solid color-mix(in srgb, var(--accent) 55%, transparent);outline-offset:2px}
+.profile-footer-actions{display:flex;gap:8px;justify-content:flex-start;margin-top:10px}
 /* hide auth button on profile page */
 body.profile-page-active .login-btn{display:none !important;}
 
@@ -52,11 +58,11 @@ body.theme-sepia .pe-dialog{box-shadow:0 20px 44px rgba(62,34,18,0.36);}
 
 
 /* === Profile compact left-aligned === */
-.profile-wrap.profile-compact{max-width:860px;margin:10px 24px 48px 24px;padding:0}
+.profile-wrap.profile-compact{max-width:860px;margin:10px var(--page-padding, var(--gap,28px)) 48px;padding:0}
 .profile-plain .profile-header{align-items:center;gap:12px;margin-bottom:10px;width:100%}
 .profile-plain h1{font-size:22px;margin:0}
-.profile-plain .profile-view{margin-top:6px}
-.profile-plain .profile-view > div{margin:6px 0;font-size:16px;color:inherit}
+.profile-plain .profile-view{margin-top:4px;margin-bottom:4px}
+.profile-plain .profile-view > div{margin:4px 0;font-size:16px;color:inherit}
 /* Buttons: pill/round */
 .round-btn{border-radius:9999px;padding:10px 16px;display:inline-flex;align-items:center;gap:8px;background:var(--btn-bg);color:var(--btn-fg);border:1px solid var(--btn-border);box-shadow:var(--btn-shadow);transition:transform .15s ease,background-color .2s ease,color .2s ease,border-color .2s ease,box-shadow .2s ease}
 .round-btn.light{background:var(--btn-bg);color:var(--btn-fg);border:1px solid var(--btn-border)}
@@ -66,11 +72,11 @@ body.theme-sepia .pe-dialog{box-shadow:0 20px 44px rgba(62,34,18,0.36);}
 .round-btn .btn-icon{display:inline-block;width:18px;height:18px;flex:0 0 18px;background:currentColor;mask-repeat:no-repeat;mask-position:center;mask-size:contain;-webkit-mask-repeat:no-repeat;-webkit-mask-position:center;-webkit-mask-size:contain}
 .round-btn .btn-icon-exit{mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='black' d='M4 5h8v2H6v10h6v2H4z'/%3E%3Cpath fill='black' d='M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.59L17 17l5-5-5-5z'/%3E%3C/svg%3E");-webkit-mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='black' d='M4 5h8v2H6v10h6v2H4z'/%3E%3Cpath fill='black' d='M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.59L17 17l5-5-5-5z'/%3E%3C/svg%3E");}
 /* Place footer actions closer and start aligned */
-.profile-plain .profile-footer-actions{justify-content:flex-start;margin-top:14px;gap:12px}
+.profile-plain .profile-footer-actions{justify-content:flex-start;margin-top:8px;gap:12px}
 /* Avatar little smaller to look compact */
 .profile-plain .avatar-wrap{width:72px;height:72px}
 /* On very wide screens keep left alignment */
-.main .profile-wrap{margin-left:24px}
+.main .profile-wrap{margin-left:0}
 
 
 

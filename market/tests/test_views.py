@@ -3,6 +3,7 @@ from __future__ import annotations
 from datetime import timedelta
 from decimal import Decimal
 
+from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.test import Client, TestCase
 from django.urls import reverse
@@ -17,7 +18,7 @@ class MarketViewsTests(TestCase):
     def setUp(self):
         User = get_user_model()
         self.user = User.objects.create_user(username="viewer", password="pass123")
-        profile = Profile.objects.create(user=self.user)
+        profile = Profile.objects.create(user=self.user, terms_version_accepted=settings.TERMS_VERSION)
         self.rubric = Rubric.objects.create(
             profile=profile,
             name="Картины",
