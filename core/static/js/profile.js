@@ -31,6 +31,79 @@
     const base = Number.isFinite(num) ? num : fallback;
     return Math.min(Math.max(base, min), max);
   }
+  const PROFILE_ALLOWED_LINK_SCHEMES=new Set(['http:','https:','mailto:','tg:','tel:']);
+  function normaliseProfileLinkTarget(raw){
+    const value = typeof raw === 'string' ? raw.trim() : '';
+    if (!value) return '';
+    const schemeMatch = value.match(/^([a-zA-Z][\w+.-]*):/);
+    if (schemeMatch){
+      const scheme = (schemeMatch[1] + ':').toLowerCase();
+      if (!PROFILE_ALLOWED_LINK_SCHEMES.has(scheme)) return '';
+      if (scheme === 'http:' || scheme === 'https:'){
+        try{
+          const url = new URL(value);
+          return url.href;
+        }catch(err){
+          return '';
+        }
+      }
+      return value;
+    }
+    if (/\s/.test(value)) return '';
+    if (!value.includes('.') && !value.startsWith('localhost')) return '';
+    try{
+      const url = new URL(`https://${value}`);
+      return url.href;
+    }catch(err){
+      return '';
+    }
+  }
+  function describeProfileLink(raw){
+    const value = typeof raw === 'string' ? raw.trim() : '';
+    if (!value) return null;
+    const match = value.match(/^(.+?)\[(.+)\]$/u);
+    if (match){
+      const label = match[1].trim();
+      const target = normaliseProfileLinkTarget(match[2]);
+      if (label && target){
+        return { type: 'link', href: target, text: label };
+      }
+      return { type: 'text', text: value };
+    }
+    const target = normaliseProfileLinkTarget(value);
+    if (target){
+      return { type: 'link', href: target, text: value };
+    }
+    return { type: 'text', text: value };
+  }
+  function renderProfileLinkDisplay(element, raw){
+    if (!element) return;
+    const descriptor = describeProfileLink(raw);
+    element.textContent = '—';
+    element.dataset.state = 'empty';
+    element.classList.remove('profile-link-value--has-link');
+    if (!descriptor){
+      return;
+    }
+    if (descriptor.type === 'link'){
+      const anchor=document.createElement('a');
+      anchor.href=descriptor.href;
+      anchor.textContent=descriptor.text || descriptor.href;
+      anchor.target='_blank';
+      anchor.rel='noopener noreferrer';
+      anchor.className='profile-link';
+      element.textContent='';
+      element.appendChild(anchor);
+      element.dataset.state='link';
+      element.classList.add('profile-link-value--has-link');
+      return;
+    }
+    const text = descriptor.text || '';
+    if (text){
+      element.textContent = text;
+      element.dataset.state = 'text';
+    }
+  }
   function normalizeAvatarPos(pos){
     const base = (pos && typeof pos === 'object') ? pos : {};
     const rawScale = base.scale ?? base.zoom ?? base.size;
@@ -135,6 +208,7 @@
     if (topbarTitle) topbarTitle.textContent = 'Профиль';
     function T(f,val){ const el=S('[data-f="'+f+'"]',v); if(el) el.textContent=val||'—'; }
     ['first','last','city','email','phone','interests'].forEach(k=>T(k,d[k]));
+    renderProfileLinkDisplay(S('[data-f="link"]', v), d.link);
     const img=S('#avatarImg'), wrap=S('.avatar-wrap'), ph=S('.avatar-placeholder');
     const avatarPos = normalizeAvatarPos(d.avatarPos);
     if(img){
@@ -176,7 +250,7 @@
       const file=S('#pe_file');
       const errorBox=S('#pe_error');
       if (errorBox) errorBox.textContent='';
-      const fields=['first','last','city','email','phone','interests'];
+      const fields=['first','last','city','email','link','phone','interests'];
       fields.forEach(k=>{ const el=S('#pe_'+k); if(el){ el.value=d[k]||''; el.classList.remove('pe-invalid'); } });
       const updateZoomLabel=(scale)=>{
         if(!controlsWrap) return;

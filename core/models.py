@@ -17,6 +17,7 @@ class Profile(models.Model):
     avatar = models.ImageField(upload_to='avatars/', blank=True, null=True)
     avatar_meta = models.JSONField(default=dict, blank=True)
     privacy_level = models.CharField(max_length=50, default='public')
+    link = models.CharField(max_length=255, blank=True, default='')
     terms_version_accepted = models.CharField(max_length=20, blank=True, default='')
     terms_accepted_at = models.DateTimeField(blank=True, null=True)
     terms_accepted_ip = models.GenericIPAddressField(blank=True, null=True)
