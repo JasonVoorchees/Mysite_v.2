@@ -36,6 +36,7 @@ MIDDLEWARE = [
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'core.middleware.TermsAcceptanceMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
@@ -56,6 +57,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'core.context_processors.terms',
             ],
         },
     },
@@ -111,3 +113,26 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 LOGIN_URL = '/'
 LOGIN_REDIRECT_URL = '/archive.html'
+
+# --- Moderation and compliance -------------------------------------------------
+# Update these lists when policies change. Settings administrators can adjust
+# banned vocabulary, file types and size limits in one place without touching
+# business logic.
+BANNED_WORDS = [
+    'спам',
+    'spam',
+    'мошенничество',
+    'fraud',
+    'экстремизм',
+    'extremism',
+]
+BANNED_MIME_TYPES = [
+    'application/x-msdownload',
+    'text/javascript',
+]
+BANNED_EXTENSIONS = ['.exe', '.js', '.bat', '.cmd']
+MAX_FILE_SIZE_MB = int(os.environ.get('MAX_UPLOAD_MB', '10'))
+
+# Bump this version whenever the public terms text changes. Users must re-accept
+# the latest version before continuing to use interactive features.
+TERMS_VERSION = os.environ.get('TERMS_VERSION', '2024-01')

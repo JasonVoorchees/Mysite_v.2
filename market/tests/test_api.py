@@ -5,6 +5,7 @@ import json
 from datetime import timedelta
 from decimal import Decimal
 
+from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.test import Client, TestCase
 from django.urls import reverse
@@ -20,8 +21,8 @@ class MarketApiTests(TestCase):
         User = get_user_model()
         self.owner = User.objects.create_user(username="owner", password="pass123")
         self.other = User.objects.create_user(username="buyer", password="pass123")
-        self.owner_profile = Profile.objects.create(user=self.owner)
-        self.other_profile = Profile.objects.create(user=self.other)
+        self.owner_profile = Profile.objects.create(user=self.owner, terms_version_accepted=settings.TERMS_VERSION)
+        self.other_profile = Profile.objects.create(user=self.other, terms_version_accepted=settings.TERMS_VERSION)
         self.rubric = Rubric.objects.create(
             profile=self.owner_profile,
             name="Картины",
