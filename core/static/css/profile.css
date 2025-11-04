@@ -39,7 +39,8 @@ body.theme-sepia .profile-confirm__dialog{box-shadow:0 18px 40px rgba(62,34,18,0
 
 /* Edit modal */
 .pe-modal{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:var(--overlay);z-index:1100}
-.pe-dialog{background: var(--card);color: inherit;border:1px solid var(--card-border);border-radius:16px;padding:12px 22px;width:min(900px,96vw);max-height:90vh;overflow:auto;box-shadow:0 28px 60px rgba(5,7,18,.42);transition:background-color .25s ease,border-color .25s ease,color .25s ease}
+.pe-dialog-wrap{position:relative;display:inline-flex;flex-direction:column;align-items:stretch;}
+.pe-dialog{background: var(--card);color: inherit;border:1px solid var(--card-border);border-radius:16px;padding:12px 22px 18px;width:min(900px,96vw);max-height:90vh;overflow:auto;box-shadow:0 28px 60px rgba(5,7,18,.42);transition:background-color .25s ease,border-color .25s ease,color .25s ease}
 body.theme-light .pe-dialog{box-shadow:0 20px 42px rgba(136,150,230,0.22);}
 body.theme-retro .pe-dialog{box-shadow:0 20px 44px rgba(14,16,28,0.38);}
 body.theme-sepia .pe-dialog{box-shadow:0 20px 44px rgba(62,34,18,0.36);}
@@ -52,6 +53,15 @@ body.theme-sepia .pe-dialog{box-shadow:0 20px 44px rgba(62,34,18,0.36);}
 .pe-grid input,.pe-grid textarea{background:var(--input-bg);color:var(--input-fg);border: 1px solid var(--input-border);border-radius:10px;padding:10px 12px;outline:none;transition:background-color .2s ease,color .2s ease,border-color .2s ease,box-shadow .2s ease}
 .pe-grid textarea{min-height:90px;resize:vertical}
 .pe-grid .full{grid-column:1/-1}
+
+.pe-actions{position:absolute;right:24px;bottom:-18px;display:flex;gap:14px;align-items:center;justify-content:flex-end;z-index:5;}
+.pe-actions button{border:1px solid transparent;border-radius:9999px;padding:10px 18px;font-weight:600;cursor:pointer;transition:box-shadow .15s ease,transform .05s ease,background-color .15s ease,color .15s ease,border-color .15s ease}
+.pe-actions #pe_save{background:var(--primary-bg);color:var(--primary-fg);box-shadow:0 6px 16px color-mix(in srgb, var(--primary-bg) 45%, transparent);}
+.pe-actions #pe_save:hover{background:var(--primary-hover);box-shadow:0 8px 22px color-mix(in srgb, var(--primary-bg) 55%, transparent);}
+.pe-actions #pe_save:active{transform:translateY(1px)}
+.pe-actions [data-close]{background:var(--btn-bg);color:var(--btn-fg);border-color:var(--btn-border);box-shadow:var(--btn-shadow)}
+.pe-actions [data-close]:hover{background:var(--btn-bg-hover)}
+.pe-actions [data-close]:active{transform:translateY(1px)}
 
 
 /* === Profile compact left-aligned === */
@@ -108,17 +118,6 @@ body.theme-sepia .pe-dialog{box-shadow:0 20px 44px rgba(62,34,18,0.36);}
 .pe-avatar .avatar-controls.disabled .avatar-ctrl{opacity:.45;cursor:not-allowed;}
 
 .avatar-wrap img{transform:scale(var(--avatar-scale,1));transform-origin:var(--avatar-origin-x,50%) var(--avatar-origin-y,50%);transition:object-position .15s ease,transform .15s ease;}
-
-/* === Pretty buttons inside Profile Edit modal === */
-.pe-foot{display:flex;gap:14px;justify-content:flex-end;margin-top:6px;padding-top:6px;flex-wrap:nowrap}
-.pe-foot button{border:1px solid transparent;border-radius:9999px;padding:10px 18px;font-weight:600;cursor:pointer;transition:box-shadow .15s ease, transform .05s ease, background-color .15s ease,color .15s ease,border-color .15s ease}
-.pe-foot #pe_save{background:var(--primary-bg);color:var(--primary-fg);box-shadow:0 6px 16px color-mix(in srgb, var(--primary-bg) 45%, transparent);}
-.pe-foot #pe_save:hover{background:var(--primary-hover);box-shadow:0 8px 22px color-mix(in srgb, var(--primary-bg) 55%, transparent);}
-.pe-foot #pe_save:active{transform:translateY(1px)}
-.pe-foot [data-close]{background:var(--btn-bg);color:var(--btn-fg);border-color:var(--btn-border);box-shadow:var(--btn-shadow)}
-.pe-foot [data-close]:hover{background:var(--btn-bg-hover)}
-.pe-foot [data-close]:active{transform:translateY(1px)}
-
 
 .pe-error{color:#ef4444;font-size:14px;margin:0 0 10px;min-height:18px}
 .pe-grid input.pe-invalid,.pe-grid textarea.pe-invalid{border-color:#ef4444;box-shadow:0 0 0 1px rgba(239,68,68,.35);}

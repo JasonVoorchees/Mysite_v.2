@@ -59,45 +59,47 @@
 
   <!-- Edit modal -->
   <div id="profileEditModal" class="pe-modal" style="display:none;">
-    <div class="pe-dialog">
-      <div class="pe-head">
-        <h3 id="profileEditTitle">Редактирование профиля</h3>
-      </div>
-      <div class="pe-body">
-        <div class="pe-avatar">
-          <div id="pe_avatarBox" class="avatar-box">
-            <img id="pe_prev" alt="" draggable="false"/>
-          </div>
-          <div id="pe_avatarControls" class="avatar-controls" aria-label="Управление положением фото">
-            <div class="avatar-controls-row avatar-controls-row--single" role="group" aria-label="Сместить вверх">
-              <button type="button" class="avatar-ctrl" data-dir="up" aria-label="Сместить вверх">▲</button>
-            </div>
-            <div class="avatar-controls-row" role="group" aria-label="Сместить по горизонтали и вниз">
-              <button type="button" class="avatar-ctrl" data-dir="left" aria-label="Сместить влево">◄</button>
-              <button type="button" class="avatar-ctrl" data-dir="down" aria-label="Сместить вниз">▼</button>
-              <button type="button" class="avatar-ctrl" data-dir="right" aria-label="Сместить вправо">►</button>
-            </div>
-            <div class="avatar-zoom">
-              <button type="button" class="avatar-ctrl" data-zoom="out" aria-label="Уменьшить фото">−</button>
-              <span class="avatar-zoom-value" data-zoom-value>100%</span>
-              <button type="button" class="avatar-ctrl" data-zoom="in" aria-label="Увеличить фото">+</button>
-            </div>
-          </div>
-          <input type="file" id="pe_file" accept="image/png,image/jpeg,image/webp,image/gif" hidden>
+    <div class="pe-dialog-wrap">
+      <div class="pe-dialog">
+        <div class="pe-head">
+          <h3 id="profileEditTitle">Редактирование профиля</h3>
         </div>
-        <div class="pe-right">
-          <div class="pe-grid">
-            <input id="pe_first" placeholder="Имя">
-            <input id="pe_last"  placeholder="Фамилия">
-            <input id="pe_city"  placeholder="Город">
-            <input id="pe_email" placeholder="Почта">
-            <input id="pe_link" placeholder="Ссылка">
-            <input id="pe_phone" placeholder="Телефон">
-            <textarea id="pe_interests" placeholder="Интересы" class="full"></textarea>
+        <div class="pe-body">
+          <div class="pe-avatar">
+            <div id="pe_avatarBox" class="avatar-box">
+              <img id="pe_prev" alt="" draggable="false"/>
+            </div>
+            <div id="pe_avatarControls" class="avatar-controls" aria-label="Управление положением фото">
+              <div class="avatar-controls-row avatar-controls-row--single" role="group" aria-label="Сместить вверх">
+                <button type="button" class="avatar-ctrl" data-dir="up" aria-label="Сместить вверх">▲</button>
+              </div>
+              <div class="avatar-controls-row" role="group" aria-label="Сместить по горизонтали и вниз">
+                <button type="button" class="avatar-ctrl" data-dir="left" aria-label="Сместить влево">◄</button>
+                <button type="button" class="avatar-ctrl" data-dir="down" aria-label="Сместить вниз">▼</button>
+                <button type="button" class="avatar-ctrl" data-dir="right" aria-label="Сместить вправо">►</button>
+              </div>
+              <div class="avatar-zoom">
+                <button type="button" class="avatar-ctrl" data-zoom="out" aria-label="Уменьшить фото">−</button>
+                <span class="avatar-zoom-value" data-zoom-value>100%</span>
+                <button type="button" class="avatar-ctrl" data-zoom="in" aria-label="Увеличить фото">+</button>
+              </div>
+            </div>
+            <input type="file" id="pe_file" accept="image/png,image/jpeg,image/webp,image/gif" hidden>
+          </div>
+          <div class="pe-right">
+            <div class="pe-grid">
+              <input id="pe_first" placeholder="Имя">
+              <input id="pe_last"  placeholder="Фамилия">
+              <input id="pe_city"  placeholder="Город">
+              <input id="pe_email" placeholder="Почта">
+              <input id="pe_link" placeholder="Ссылка">
+              <input id="pe_phone" placeholder="Телефон">
+              <textarea id="pe_interests" placeholder="Интересы" class="full"></textarea>
+            </div>
           </div>
         </div>
       </div>
-      <div class="pe-foot">
+      <div class="pe-actions" role="group" aria-label="Действия профиля">
         <button id="pe_save" class="ios-button">Сохранить</button>
         <button type="button" class="btn" data-close>Отмена</button>
       </div>

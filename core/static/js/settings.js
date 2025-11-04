@@ -3,7 +3,7 @@
   const apply = window.__applyUIPrefs || (() => {});
   const PREF_KEY = 'ui_prefs_v1';
 
-  const allowedThemes = ['dark','light','retro','sepia','contrast','midnight','aurora','pastel','system'];
+  const allowedThemes = ['dark','light','retro','sepia','contrast','midnight','aurora','pastel'];
   const allowedAccents = ['blue','violet','emerald','amber','rose','sky','mint','copper'];
   const allowedFontFamilies = ['system','arial','montserrat','roboto','playfair','lato','kudry'];
   const allowedLineHeights = ['normal','relaxed','compact'];

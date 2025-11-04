@@ -78,23 +78,14 @@
 
     // Theme management
     body.classList.remove(...themeClasses);
+    body.classList.remove('theme-system');
+    body.removeAttribute('data-system-theme');
     let theme=typeof prefs.theme==='string' ? prefs.theme : DEFAULTS.theme;
-    let appliedTheme=theme;
-    if(theme==='system'){
-      let mq;
-      try{ mq=window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)'); }catch(e){ mq=null; }
-      appliedTheme = mq && mq.matches ? 'dark' : 'light';
-      body.dataset.systemTheme = appliedTheme;
-    } else {
-      delete body.dataset.systemTheme;
+    const themeClass='theme-'+theme;
+    if(!themeClasses.includes(themeClass)){
+      theme = DEFAULTS.theme;
     }
-    if(theme==='system'){ body.classList.add('theme-system'); }
-    else { body.classList.remove('theme-system'); }
-    if(appliedTheme && themeClasses.includes('theme-'+appliedTheme)){
-      body.classList.add('theme-'+appliedTheme);
-    } else {
-      body.classList.add('theme-dark');
-    }
+    body.classList.add('theme-'+theme);
 
     // Accent colors
     body.classList.remove(...accentClasses);
@@ -172,27 +163,6 @@
   apply(load());
   window.__loadUIPrefs=load; window.__applyUIPrefs=apply;
 
-  const systemMedia = (function(){
-    try{ return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)'); }
-    catch(e){ return null; }
-  })();
-
-  function refreshSystemTheme(){
-    try {
-      const prefs=load();
-      if((prefs && prefs.theme) === 'system'){
-        apply(prefs);
-      }
-    } catch(e){}
-  }
-
-  if(systemMedia){
-    if(typeof systemMedia.addEventListener==='function'){
-      systemMedia.addEventListener('change', refreshSystemTheme);
-    } else if(typeof systemMedia.addListener==='function'){
-      systemMedia.addListener(refreshSystemTheme);
-    }
-  }
 })();
 
 /* Live-обновление темы и масштаба на других открытых страницах */
