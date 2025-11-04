@@ -110,7 +110,7 @@ body.theme-sepia .pe-dialog{box-shadow:0 20px 44px rgba(62,34,18,0.36);}
 .avatar-wrap img{transform:scale(var(--avatar-scale,1));transform-origin:var(--avatar-origin-x,50%) var(--avatar-origin-y,50%);transition:object-position .15s ease,transform .15s ease;}
 
 /* === Pretty buttons inside Profile Edit modal === */
-.pe-foot{display:flex;gap:10px;justify-content:flex-end;margin-top:12px;padding-top:8px}
+.pe-foot{display:flex;gap:14px;justify-content:flex-end;margin-top:6px;padding-top:6px;flex-wrap:nowrap}
 .pe-foot button{border:1px solid transparent;border-radius:9999px;padding:10px 18px;font-weight:600;cursor:pointer;transition:box-shadow .15s ease, transform .05s ease, background-color .15s ease,color .15s ease,border-color .15s ease}
 .pe-foot #pe_save{background:var(--primary-bg);color:var(--primary-fg);box-shadow:0 6px 16px color-mix(in srgb, var(--primary-bg) 45%, transparent);}
 .pe-foot #pe_save:hover{background:var(--primary-hover);box-shadow:0 8px 22px color-mix(in srgb, var(--primary-bg) 55%, transparent);}
