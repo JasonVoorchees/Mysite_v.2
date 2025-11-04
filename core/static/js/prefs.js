@@ -4,6 +4,7 @@
     theme:'dark',
     accent:'blue',
     fontScale:1,
+    bgIntensity:0.68,
     fontFamily:'system',
     lineHeight:'normal',
     density:'cozy',
@@ -162,6 +163,10 @@
 
     const scale=Number(pick(prefs,'fontScale',DEFAULTS.fontScale));
     document.documentElement.style.setProperty('--fz-scale', String(scale>0?scale:1));
+    let intensity = Number(pick(prefs, 'bgIntensity', DEFAULTS.bgIntensity));
+    if (!Number.isFinite(intensity)) intensity = DEFAULTS.bgIntensity;
+    intensity = Math.min(1, Math.max(0, intensity));
+    document.documentElement.style.setProperty('--bg-intensity', intensity.toFixed(3));
   }
 
   apply(load());

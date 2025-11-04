@@ -24,6 +24,7 @@
     theme: 'dark',
     accent: 'blue',
     fontScale: 1,
+    bgIntensity: 0.68,
     fontFamily: 'system',
     lineHeight: 'normal',
     density: 'cozy',
@@ -59,6 +60,8 @@
 
   const fontRange = document.getElementById('fontRange');
   const fontLabel = document.getElementById('fontLabel');
+  const bgRange = document.getElementById('bgIntensityRange');
+  const bgLabel = document.getElementById('bgIntensityLabel');
   const prefControls = Array.from(document.querySelectorAll('input[data-pref], select[data-pref]'));
   const privacyControl = document.querySelector('.privacy-control');
   const privacyToggle = document.getElementById('privacyToggle');
@@ -76,6 +79,14 @@
       return 1;
     }
     return Math.min(1.6, Math.max(0.85, num));
+  }
+
+  function clampIntensity(value) {
+    const num = Number(value);
+    if (!Number.isFinite(num)) {
+      return defaults.bgIntensity;
+    }
+    return Math.min(1, Math.max(0, num));
   }
 
   const dropdownControls = Array.from(document.querySelectorAll('.pref-dropdown[data-pref]')).map((control) => {
@@ -114,6 +125,7 @@
     state.showHints = state.showHints !== false;
     state.expandNews = !!state.expandNews;
     state.fontScale = clampFont(state.fontScale);
+    state.bgIntensity = clampIntensity(state.bgIntensity);
   }
 
   sanitizeState();
@@ -142,6 +154,7 @@
   const UI_PREF_KEYS = [
     'theme',
     'fontScale',
+    'bgIntensity',
     'accent',
     'fontFamily',
     'lineHeight',
@@ -193,6 +206,14 @@
     if (fontLabel) {
       fontLabel.textContent = `${percent}%`;
     }
+    const intensityPercent = Math.round(state.bgIntensity * 100);
+    if (bgRange) {
+      bgRange.value = String(intensityPercent);
+    }
+    if (bgLabel) {
+      bgLabel.textContent = `${intensityPercent}%`;
+    }
+    document.documentElement.style.setProperty('--bg-intensity', state.bgIntensity.toFixed(3));
     prefControls.forEach((ctrl) => {
       const key = ctrl.dataset.pref;
       if (!(key in state)) return;
@@ -256,6 +277,12 @@
         state.fontScale = normalized;
         changed = true;
       }
+    } else if (key === 'bgIntensity') {
+      const normalized = clampIntensity(value);
+      if (Math.abs(normalized - state.bgIntensity) > 0.001) {
+        state.bgIntensity = normalized;
+        changed = true;
+      }
     } else if (booleanPrefs.has(key)) {
       const boolVal = !!value;
       if (state[key] !== boolVal) {
@@ -300,6 +327,37 @@
     fontRange.addEventListener('change', () => {
       const normalized = clampFont(Number(fontRange.value) / 100);
       setPref('fontScale', normalized, `Размер сохранён: ${Math.round(normalized * 100)}%`);
+    });
+  }
+
+  if (bgRange) {
+    const applyPreview = (normalized) => {
+      document.documentElement.style.setProperty('--bg-intensity', normalized.toFixed(3));
+      if (bgLabel) {
+        bgLabel.textContent = `${Math.round(normalized * 100)}%`;
+      }
+    };
+    let previewTimer = null;
+    bgRange.addEventListener('input', () => {
+      const normalized = clampIntensity(Number(bgRange.value) / 100);
+      if (previewTimer) {
+        window.clearTimeout(previewTimer);
+      }
+      previewTimer = window.setTimeout(() => {
+        applyPreview(normalized);
+      }, 80);
+      if (bgLabel) {
+        bgLabel.textContent = `${Math.round(normalized * 100)}%`;
+      }
+    });
+    bgRange.addEventListener('change', () => {
+      const normalized = clampIntensity(Number(bgRange.value) / 100);
+      if (previewTimer) {
+        window.clearTimeout(previewTimer);
+        previewTimer = null;
+      }
+      applyPreview(normalized);
+      setPref('bgIntensity', normalized, `Интенсивность фона: ${Math.round(normalized * 100)}%`);
     });
   }
 
