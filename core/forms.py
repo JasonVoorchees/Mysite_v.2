@@ -3,6 +3,8 @@ from django import forms
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from django.contrib.auth.models import User
 
+from core.utils import moderation
+
 from .models import ArchiveFile, Rubric
 
 
@@ -39,6 +41,12 @@ class RubricForm(forms.ModelForm):
             'field_schema': forms.Textarea(attrs={'rows': 3}),
         }
 
+    def clean_name(self):
+        name = self.cleaned_data.get('name', '')
+        if name:
+            moderation.ensure_text_allowed(name, field='name')
+        return name
+
 
 class ArchiveFileForm(forms.ModelForm):
     """Captures archive file metadata mirroring the Java DTO."""
@@ -50,3 +58,15 @@ class ArchiveFileForm(forms.ModelForm):
             'rubric': forms.HiddenInput(),
             'data': forms.Textarea(attrs={'rows': 3}),
         }
+
+    def clean_title(self):
+        title = self.cleaned_data.get('title', '')
+        if title:
+            moderation.ensure_text_allowed(title, field='title')
+        return title
+
+    def clean_data(self):
+        data = self.cleaned_data.get('data')
+        if data not in (None, ''):
+            moderation.ensure_text_allowed(str(data), field='data')
+        return data

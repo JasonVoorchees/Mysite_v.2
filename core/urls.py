@@ -11,10 +11,12 @@ urlpatterns = [
     path('archive.html', views.archive, name='archive'),
     path('profile.html', views.profile, name='profile'),
     path('settings.html', views.settings, name='settings'),
+    path('terms/', views.terms, name='terms'),
     path('news.html', views.news, name='news'),
     path('api/auth/register/', views.register_user, name='register'),
     path('api/auth/login/', views.login_user, name='login'),
     path('api/auth/logout/', views.logout_user, name='logout'),
     path('api/archive/rubrics/', views.create_rubric, name='create-rubric'),
     path('api/archive/files/', views.create_archive_file, name='create-file'),
+    path('api/terms/accept/', views.accept_terms, name='accept_terms'),
 ]
