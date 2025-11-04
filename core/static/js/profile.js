@@ -371,9 +371,24 @@
         });
       }
       if(!m._wired){
+        const closeModal=()=>{
+          if (m.style.display==='none') return;
+          m.style.display='none';
+          if (m._escBound && m._escHandler){
+            document.removeEventListener('keydown', m._escHandler);
+            m._escBound=false;
+          }
+        };
+        m._closeModal=closeModal;
+        m._escHandler=(evt)=>{
+          if(evt.key==='Escape'){
+            evt.preventDefault();
+            closeModal();
+          }
+        };
         m._wired=true;
-        m.addEventListener('click', e=>{ if(e.target===m) m.style.display='none'; });
-        m.querySelectorAll('[data-close]').forEach(b=> b.addEventListener('click', ()=> m.style.display='none'));
+        m.addEventListener('click', e=>{ if(e.target===m) closeModal(); });
+        m.querySelectorAll('[data-close]').forEach(b=> b.addEventListener('click', closeModal));
         const save=S('#pe_save');
         if(save){
           save.addEventListener('click', e=>{ e.preventDefault();
@@ -384,11 +399,16 @@
             out.avatarPos=normalizeAvatarPos({ x: avatarBox?.dataset.posX, y: avatarBox?.dataset.posY, scale: avatarBox?.dataset.scale });
             saveProfile(out);
             showModalError('');
-            m.style.display='none';
+            if (typeof m._closeModal === 'function'){ m._closeModal(); }
+            else { m.style.display='none'; }
             fill();
             window.scrollTo({top:0,behavior:'smooth'});
           });
         }
+      }
+      if (m._escHandler && !m._escBound){
+        document.addEventListener('keydown', m._escHandler);
+        m._escBound=true;
       }
       fields.forEach(k=>{
         const el=S('#pe_'+k);
@@ -441,6 +461,10 @@
         });
       }
       m.style.display='flex';
+      const initialField = S('#pe_first');
+      if(initialField){
+        setTimeout(()=>{ try{ initialField.focus(); }catch(_){} }, 50);
+      }
     }
 
   function logout(){
