@@ -4,6 +4,7 @@ from __future__ import annotations
 from datetime import timedelta
 from decimal import Decimal
 
+from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
 from django.test import TestCase
@@ -18,7 +19,7 @@ class ListingModelTests(TestCase):
     def setUp(self):
         User = get_user_model()
         self.owner = User.objects.create_user(username="owner", password="pass123")
-        self.profile = Profile.objects.create(user=self.owner)
+        self.profile = Profile.objects.create(user=self.owner, terms_version_accepted=settings.TERMS_VERSION)
         self.rubric = Rubric.objects.create(
             profile=self.profile,
             name="Картины",
@@ -108,7 +109,7 @@ class BidModelTests(TestCase):
         User = get_user_model()
         self.owner = User.objects.create_user(username="owner", password="pass123")
         self.bidder = User.objects.create_user(username="bidder", password="pass123")
-        profile = Profile.objects.create(user=self.owner)
+        profile = Profile.objects.create(user=self.owner, terms_version_accepted=settings.TERMS_VERSION)
         rubric = Rubric.objects.create(
             profile=profile,
             name="Картины",

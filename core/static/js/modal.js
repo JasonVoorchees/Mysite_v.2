@@ -568,12 +568,28 @@ if (codeInputs[0]){
       if (archiveBtn) archiveBtn.style.display = isAuthed() ? '' : 'none';
       let pBtn = document.getElementById('sideProfileBtn');
       if (!pBtn){
-        pBtn = document.createElement('button');
-        pBtn.id='sideProfileBtn'; pBtn.className='side-btn'; pBtn.textContent='Профиль';
-        pBtn.addEventListener('click', ()=> location.href='profile.html');
-        nav.insertBefore(pBtn, nav.firstChild);
+        pBtn = Array.from(nav.querySelectorAll('.side-btn')).find((btn)=>{
+          return btn.textContent && btn.textContent.trim() === 'Профиль';
+        }) || null;
+        if (pBtn && !pBtn.id){
+          pBtn.id = 'sideProfileBtn';
+        }
       }
-      pBtn.style.display = isAuthed() ? '' : 'none';
+      if (!pBtn){
+        pBtn = document.createElement('button');
+        pBtn.id = 'sideProfileBtn';
+        pBtn.className = 'side-btn';
+        pBtn.textContent = 'Профиль';
+        pBtn.addEventListener('click', ()=> location.href='profile.html');
+        pBtn._profileNavBound = true;
+        nav.insertBefore(pBtn, nav.firstChild);
+      } else if (pBtn.tagName === 'BUTTON' && !pBtn._profileNavBound){
+        pBtn.addEventListener('click', ()=> location.href='profile.html');
+        pBtn._profileNavBound = true;
+      }
+      if (pBtn){
+        pBtn.style.display = isAuthed() ? '' : 'none';
+      }
     }
   }
   document.addEventListener('DOMContentLoaded', toggleUI);
@@ -746,12 +762,24 @@ window.__notifyAuthSuccess = function(){
       if (archive) archive.style.display = isAuthed() ? '' : 'none';
       let p = document.getElementById('sideProfileBtn');
       if (!p){
+        p = Array.from(nav.querySelectorAll('.side-btn')).find(btn => (btn.textContent||'').trim() === 'Профиль') || null;
+        if (p && !p.id){
+          p.id = 'sideProfileBtn';
+        }
+      }
+      if (!p){
         p = document.createElement('button');
         p.id='sideProfileBtn'; p.className='side-btn'; p.textContent='Профиль';
         p.addEventListener('click', ()=> location.href='profile.html');
+        p._profileNavBound = true;
         nav.insertBefore(p, nav.firstChild);
+      } else if (p.tagName === 'BUTTON' && !p._profileNavBound){
+        p.addEventListener('click', ()=> location.href='profile.html');
+        p._profileNavBound = true;
       }
-      p.style.display = isAuthed() ? '' : 'none';
+      if (p){
+        p.style.display = isAuthed() ? '' : 'none';
+      }
     }
   }
 

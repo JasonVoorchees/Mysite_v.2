@@ -44,7 +44,12 @@ const newsData = [
 ];
 
 const list = document.getElementById('newsList');
-newsData.forEach(n=>{
+
+function isAutoExpandEnabled(){
+  return document.body.classList.contains('news-auto-expand');
+}
+
+function buildCard(n){
   const card = document.createElement('article');
   card.className = 'news-card';
   card.setAttribute('role', 'button');
@@ -62,11 +67,16 @@ newsData.forEach(n=>{
       toggleNewsCard(card);
     }
   });
-  list.appendChild(card);
-});
+  return card;
+}
 
 function toggleNewsCard(card){
   if (!card) return;
+  if (isAutoExpandEnabled()) {
+    card.classList.add('expanded');
+    card.setAttribute('aria-expanded', 'true');
+    return;
+  }
   const willExpand = !card.classList.contains('expanded');
   document.querySelectorAll('.news-card.expanded').forEach(c => {
     if (c !== card) {
@@ -85,8 +95,39 @@ function toggleNewsCard(card){
   }
 }
 
+function applyAutoExpand(){
+  const auto = isAutoExpandEnabled();
+  document.querySelectorAll('.news-card').forEach((card)=>{
+    if(auto){
+      card.classList.add('expanded');
+      card.setAttribute('aria-expanded', 'true');
+    }else{
+      card.classList.remove('expanded');
+      card.setAttribute('aria-expanded', 'false');
+    }
+  });
+}
+
+newsData.forEach(n=>{
+  if(!list) return;
+  const card = buildCard(n);
+  list.appendChild(card);
+});
+
+applyAutoExpand();
+
+const bodyClassObserver = new MutationObserver((mutations)=>{
+  if(mutations.some(m=>m.attributeName==='class')){
+    applyAutoExpand();
+  }
+});
+if(document.body){
+  bodyClassObserver.observe(document.body,{attributes:true,attributeFilter:['class']});
+}
+
 // toggle logic: open clicked card, close others
 document.addEventListener('click', (e)=>{
+  if(isAutoExpandEnabled()) return;
   const card = e.target.closest('.news-card');
   if(card){
     toggleNewsCard(card);

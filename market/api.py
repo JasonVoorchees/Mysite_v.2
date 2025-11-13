@@ -15,6 +15,7 @@ from django.utils import timezone
 from django.utils.timezone import make_aware
 
 from core.models import ArchiveFile
+from core.utils import moderation
 
 from .models import Bid, Listing
 
@@ -120,6 +121,21 @@ def listing_create(request: HttpRequest) -> JsonResponse:
 
     if errors:
         return JsonResponse({"ok": False, "errors": errors}, status=400)
+
+    moderation_errors: dict[str, str] = {}
+    for field_name, value in (
+        ("title", listing.title or ""),
+        ("description", listing.description or ""),
+        ("swap_wishlist", listing.swap_wishlist or ""),
+    ):
+        if value:
+            try:
+                moderation.ensure_text_allowed(value, field=field_name)
+            except ValidationError as exc:
+                moderation_errors[field_name] = exc.messages[0]
+
+    if moderation_errors:
+        return JsonResponse({"ok": False, "errors": moderation_errors}, status=400)
 
     try:
         listing.save()
