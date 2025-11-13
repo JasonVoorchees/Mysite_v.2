@@ -1,0 +1,57 @@
+QMainWindow {
+    background-color: #0f172a;
+    color: #f8fafc;
+}
+
+QFrame#Sidebar {
+    background-color: rgba(15, 23, 42, 0.85);
+    border-right: 1px solid rgba(148, 163, 184, 0.3);
+}
+
+QLabel#SidebarTitle {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 8px;
+}
+
+QPushButton#SettingsButton,
+QPushButton#SearchButton {
+    background-color: rgba(59, 130, 246, 0.15);
+    border: 1px solid rgba(59, 130, 246, 0.4);
+    border-radius: 8px;
+    padding: 8px 12px;
+    color: #f8fafc;
+}
+
+QPushButton#SettingsButton:hover,
+QPushButton#SearchButton:hover {
+    background-color: rgba(59, 130, 246, 0.3);
+}
+
+QListWidget#RubricList::item {
+    padding: 8px;
+}
+
+QListWidget#RubricList::item:selected {
+    background-color: rgba(59, 130, 246, 0.4);
+}
+
+QListWidget#ArchiveList::item {
+    padding: 10px;
+    margin: 6px;
+    border-radius: 10px;
+    background-color: rgba(15, 23, 42, 0.55);
+}
+
+QSlider::groove:horizontal {
+    background: rgba(226, 232, 240, 0.3);
+    height: 6px;
+    border-radius: 3px;
+}
+
+QSlider::handle:horizontal {
+    width: 16px;
+    background: #38bdf8;
+    border-radius: 8px;
+    margin: -5px 0;
+}

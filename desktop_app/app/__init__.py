@@ -1,0 +1,1 @@
+"""Trezo desktop application package."""
