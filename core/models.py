@@ -9,6 +9,29 @@ from django.utils import timezone
 from core.utils import moderation
 
 
+class UserProfile(models.Model):
+    """Stores profile data persisted in the new PostgreSQL database."""
+
+    login = models.CharField(max_length=255, unique=True)
+    passwor = models.CharField(max_length=255)
+    name = models.CharField(max_length=255)
+    last_name = models.CharField(max_length=255)
+    city = models.CharField(max_length=255)
+    mail = models.EmailField(max_length=255)
+    link = models.CharField(max_length=255)
+    telephone = models.CharField(max_length=255)
+    interests = models.TextField()
+    create_date = models.DateTimeField(auto_now_add=True)
+    update_date = models.DateTimeField(auto_now=True)
+    delete = models.IntegerField(default=0)
+
+    class Meta:
+        ordering = ['login']
+
+    def __str__(self) -> str:  # pragma: no cover
+        return self.login
+
+
 class Profile(models.Model):
     """Stores user profile metadata formerly held in a Java Profile entity."""
 

@@ -68,11 +68,11 @@ ASGI_APPLICATION = 'trezo_site.asgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.environ.get('POSTGRES_DB', 'trezo'),
-        'USER': os.environ.get('POSTGRES_USER', 'trezo'),
-        'PASSWORD': os.environ.get('POSTGRES_PASSWORD', 'trezo'),
-        'HOST': os.environ.get('POSTGRES_HOST', 'localhost'),
+        'ENGINE': os.environ.get('POSTGRES_ENGINE', 'django.db.backends.postgresql'),
+        'NAME': os.environ.get('POSTGRES_DB', 'user_bd'),
+        'USER': os.environ.get('POSTGRES_USER', 'user_bd'),
+        'PASSWORD': os.environ.get('POSTGRES_PASSWORD', 'user123968'),
+        'HOST': os.environ.get('POSTGRES_HOST', 'db'),
         'PORT': os.environ.get('POSTGRES_PORT', '5432'),
     }
 }
