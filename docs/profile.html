@@ -1,12 +1,11 @@
-{% load static %}
 <!doctype html>
 <html lang="ru">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Профиль</title>
-  <link rel="stylesheet" href="{% static 'css/style.css' %}" />
-  <link rel="stylesheet" href="{% static 'css/profile.css' %}" />
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/profile.css" />
 </head>
 <body>
   <aside class="sidebar">
@@ -15,13 +14,9 @@
       <div class="side-nav-divider" aria-hidden="true"></div>
       <div class="side-nav-footer">
         <div class="side-nav-links" role="group" aria-label="Навигация по разделам">
-          <a class="side-btn" href="{% url 'core:archive' %}">Ваш архив</a>
-          {% if show_marketplace_buttons %}
-            {% include 'includes/market_dropup.html' with current_section='profile' %}
-          {% endif %}
-          <a class="side-btn" href="{% url 'core:settings' %}">Настройки</a>
-          <a class="side-btn" href="{% url 'core:news' %}">Тех. информация</a>
-          <a class="side-btn" href="/messages/">Сообщения</a>
+          <a class="side-btn" href="archive.html">Ваш архив</a>
+          <a class="side-btn" href="settings.html">Настройки</a>
+          <a class="side-btn" href="news.html">Тех. информация</a>
         </div>
       </div>
     </nav>
@@ -124,8 +119,8 @@
     </div>
   </div>
 
-  <script src="{% static 'js/nav.js' %}"></script>
-  <script src="{% static 'js/profile.js' %}"></script>
-  <script src="{% static 'js/prefs.js' %}"></script>
+  <script src="js/nav.js"></script>
+  <script src="js/profile.js"></script>
+  <script src="js/prefs.js"></script>
 </body>
 </html>

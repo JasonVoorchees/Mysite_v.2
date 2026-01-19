@@ -10,7 +10,7 @@
   {% if current != 'settings' %}
     <a class="side-btn" href="{% url 'core:settings' %}">Настройки</a>
   {% endif %}
-  {% if current != 'market' %}
+  {% if show_marketplace_buttons and current != 'market' %}
     {% include 'includes/market_dropup.html' with current_section=current %}
   {% endif %}
   {% if current != 'news' %}

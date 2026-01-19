@@ -1,11 +1,10 @@
-{% load static %}
 <!doctype html>
 <html lang="ru">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Ваш архив</title>
-  <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+  <link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
   <aside class="sidebar">
@@ -24,7 +23,11 @@
       </div>
       <div class="side-nav-divider" aria-hidden="true"></div>
       <div class="side-nav-footer">
-        {% include 'includes/side_nav_links.html' with current_section='archive' include_archive=False %}
+        <div class="side-nav-links" role="group" aria-label="Навигация по разделам">
+          <a class="side-btn" href="profile.html">Профиль</a>
+          <a class="side-btn" href="settings.html">Настройки</a>
+          <a class="side-btn" href="news.html">Тех. информация</a>
+        </div>
       </div>
     </nav>
   </aside>
@@ -51,11 +54,11 @@
 
   <script>
     window.TREZO_CONFIG = window.TREZO_CONFIG || {};
-    window.TREZO_CONFIG.showMarketplaceButtons = {{ show_marketplace_buttons|yesno:"true,false" }};
+    window.TREZO_CONFIG.showMarketplaceButtons = false;
   </script>
-  <script src="{% static 'js/nav.js' %}"></script>
-  <script src="{% static 'js/search.js' %}"></script>
-  <script src="{% static 'js/archive.js' %}"></script>
-  <script src="{% static 'js/prefs.js' %}"></script>
+  <script src="js/nav.js"></script>
+  <script src="js/search.js"></script>
+  <script src="js/archive.js"></script>
+  <script src="js/prefs.js"></script>
 </body>
 </html>
