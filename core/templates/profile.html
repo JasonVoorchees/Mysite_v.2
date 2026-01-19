@@ -14,13 +14,7 @@
     <nav class="side-nav">
       <div class="side-nav-divider" aria-hidden="true"></div>
       <div class="side-nav-footer">
-        <div class="side-nav-links" role="group" aria-label="Навигация по разделам">
-          <a class="side-btn" href="{% url 'core:archive' %}">Ваш архив</a>
-          {% include 'includes/market_dropup.html' with current_section='profile' %}
-          <a class="side-btn" href="{% url 'core:settings' %}">Настройки</a>
-          <a class="side-btn" href="{% url 'core:news' %}">Тех. информация</a>
-          <a class="side-btn" href="/messages/">Сообщения</a>
-        </div>
+        {% include 'includes/side_nav_links.html' with current_section='profile' include_messages=True %}
       </div>
     </nav>
   </aside>
@@ -48,6 +42,7 @@
           <div><strong>Фамилия:</strong> <span data-f="last">—</span></div>
           <div><strong>Город:</strong> <span data-f="city">—</span></div>
           <div><strong>Почта:</strong> <span data-f="email">—</span></div>
+          <div><strong>Ссылка:</strong> <span data-f="link" class="profile-link-value">—</span></div>
           <div><strong>Телефон:</strong> <span data-f="phone">—</span></div>
           <div><strong>Интересы:</strong> <span data-f="interests">—</span></div>
         </div>
@@ -64,50 +59,49 @@
 
   <!-- Edit modal -->
   <div id="profileEditModal" class="pe-modal" style="display:none;">
-    <div class="pe-dialog">
-      <div class="pe-head">
-        <h3 id="profileEditTitle">Редактирование профиля</h3>
-        <button type="button" class="pe-close" data-close>&times;</button>
-      </div>
-      <div class="pe-body">
-        <div class="pe-avatar">
-          <div id="pe_avatarBox" class="avatar-box">
-            <img id="pe_prev" alt="" draggable="false"/>
-          </div>
-          <div id="pe_avatarControls" class="avatar-controls" aria-label="Управление положением фото">
-            <div class="avatar-controls-grid">
-              <div class="avatar-ctrl-spacer"></div>
-              <button type="button" class="avatar-ctrl" data-dir="up" aria-label="Сместить вверх">▲</button>
-              <div class="avatar-ctrl-spacer"></div>
-              <button type="button" class="avatar-ctrl" data-dir="left" aria-label="Сместить влево">◄</button>
-              <div class="avatar-ctrl-spacer"></div>
-              <button type="button" class="avatar-ctrl" data-dir="right" aria-label="Сместить вправо">►</button>
-              <div class="avatar-ctrl-spacer"></div>
-              <button type="button" class="avatar-ctrl" data-dir="down" aria-label="Сместить вниз">▼</button>
-              <div class="avatar-ctrl-spacer"></div>
-            </div>
-            <div class="avatar-zoom">
-              <button type="button" class="avatar-ctrl" data-zoom="out" aria-label="Уменьшить фото">−</button>
-              <span class="avatar-zoom-value" data-zoom-value>100%</span>
-              <button type="button" class="avatar-ctrl" data-zoom="in" aria-label="Увеличить фото">+</button>
-            </div>
-          </div>
-          <input type="file" id="pe_file" accept="image/png,image/jpeg,image/webp,image/gif" hidden>
+    <div class="pe-dialog-wrap">
+      <div class="pe-dialog">
+        <div class="pe-head">
+          <h3 id="profileEditTitle">Редактирование профиля</h3>
         </div>
-        <div class="pe-right">
-          <div class="pe-grid">
-            <input id="pe_first" placeholder="Имя">
-            <input id="pe_last"  placeholder="Фамилия">
-            <input id="pe_city"  placeholder="Город">
-            <input id="pe_email" placeholder="Почта">
-            <input id="pe_phone" placeholder="Телефон">
-            <textarea id="pe_interests" placeholder="Интересы" class="full"></textarea>
+        <div class="pe-body">
+          <div class="pe-avatar">
+            <div id="pe_avatarBox" class="avatar-box">
+              <img id="pe_prev" alt="" draggable="false"/>
+            </div>
+            <div id="pe_avatarControls" class="avatar-controls" aria-label="Управление положением фото">
+              <div class="avatar-controls-row avatar-controls-row--single" role="group" aria-label="Сместить вверх">
+                <button type="button" class="avatar-ctrl" data-dir="up" aria-label="Сместить вверх">▲</button>
+              </div>
+              <div class="avatar-controls-row" role="group" aria-label="Сместить по горизонтали и вниз">
+                <button type="button" class="avatar-ctrl" data-dir="left" aria-label="Сместить влево">◄</button>
+                <button type="button" class="avatar-ctrl" data-dir="down" aria-label="Сместить вниз">▼</button>
+                <button type="button" class="avatar-ctrl" data-dir="right" aria-label="Сместить вправо">►</button>
+              </div>
+              <div class="avatar-zoom">
+                <button type="button" class="avatar-ctrl" data-zoom="out" aria-label="Уменьшить фото">−</button>
+                <span class="avatar-zoom-value" data-zoom-value>100%</span>
+                <button type="button" class="avatar-ctrl" data-zoom="in" aria-label="Увеличить фото">+</button>
+              </div>
+            </div>
+            <input type="file" id="pe_file" accept="image/png,image/jpeg,image/webp,image/gif" hidden>
+          </div>
+          <div class="pe-right">
+            <div class="pe-grid">
+              <input id="pe_first" placeholder="Имя">
+              <input id="pe_last"  placeholder="Фамилия">
+              <input id="pe_city"  placeholder="Город">
+              <input id="pe_email" placeholder="Почта">
+              <input id="pe_link" placeholder="Ссылка">
+              <input id="pe_phone" placeholder="Телефон">
+              <textarea id="pe_interests" placeholder="Интересы" class="full"></textarea>
+              <div class="pe-actions" role="group" aria-label="Действия профиля">
+                <button id="pe_save" class="ios-button">Сохранить</button>
+                <button type="button" class="btn" data-close>Отмена</button>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
-      <div class="pe-foot">
-        <button id="pe_save" class="ios-button">Сохранить</button>
-        <button type="button" class="btn" data-close>Отмена</button>
       </div>
     </div>
   </div>
@@ -125,5 +119,6 @@
   <script src="{% static 'js/nav.js' %}"></script>
   <script src="{% static 'js/profile.js' %}"></script>
   <script src="{% static 'js/prefs.js' %}"></script>
+  {% include 'includes/terms_modal.html' %}
 </body>
 </html>

@@ -5,6 +5,7 @@ from typing import Iterable
 
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
+from django.core.exceptions import ValidationError
 from django.core.paginator import Paginator
 from django.db.models import F, Q
 from django.db.utils import DatabaseError
@@ -12,6 +13,8 @@ from django.http import HttpRequest, HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.utils import timezone
+
+from core.utils import moderation
 
 from .models import Listing, Message
 
@@ -350,14 +353,19 @@ def market_messages(request: HttpRequest) -> HttpResponse:
         elif recipient == request.user:
             errors["recipient"] = "Нельзя отправлять сообщение самому себе."
         else:
-            Message.objects.create(
-                listing=listing,
-                sender=request.user,
-                recipient=recipient,
-                text=message_text,
-            )
-            sent = True
-            message_text = ""
+            try:
+                moderation.ensure_text_allowed(message_text, field='message')
+            except ValidationError as exc:
+                errors["message"] = exc.messages[0]
+            else:
+                Message.objects.create(
+                    listing=listing,
+                    sender=request.user,
+                    recipient=recipient,
+                    text=message_text,
+                )
+                sent = True
+                message_text = ""
 
     context = {
         "recipient": recipient,
