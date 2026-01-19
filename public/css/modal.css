@@ -1,0 +1,320 @@
+.modal { color: inherit;
+  display: none;
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: var(--overlay);
+  backdrop-filter: blur(4px);
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+.modal-content { color: inherit;
+  background: var(--card);
+  border:1px solid var(--card-border);
+  border-radius: 20px;
+  padding: 20px;
+  width: 350px;
+  max-height: 90vh;   /* ограничим высоту окна */
+  height: auto;       /* убираем растягивание */
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  box-shadow:0 28px 60px rgba(5,7,18,0.42);
+  transition:background-color .25s ease,border-color .25s ease,color .25s ease;
+}
+body.theme-light .modal-content{box-shadow:0 18px 38px rgba(136,150,230,0.22);}
+body.theme-retro .modal-content{box-shadow:0 18px 40px rgba(14,16,28,0.38);}
+body.theme-sepia .modal-content{box-shadow:0 18px 40px rgba(60,32,18,0.36);}
+
+.auth-feedback-modal { z-index: 1201; }
+.auth-feedback-modal .modal-content {
+  width: min(320px, calc(100% - 48px));
+  text-align: center;
+  gap: 16px;
+  align-items: center;
+}
+.auth-feedback-message {
+  margin: 8px 0 0;
+  font-size: 16px;
+  line-height: 1.5;
+}
+.auth-feedback-footer {
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+}
+.auth-feedback-footer .ios-button {
+  width: auto;
+  min-width: 96px;
+}
+
+.tabs {
+  display: flex;
+  gap: 10px;                 /* расстояние только между кнопками */
+  width: 90%;                /* те же края, что у инпутов */
+  margin: 0;       /* центрируем как поля */
+  justify-content: center;   /* без внешних полей по краям */
+}
+.tab {
+  flex: 1;
+  min-width: 0;
+  box-sizing: border-box;
+  margin: 0;
+}
+
+.tab {
+  flex: 1;
+  padding: 10px;
+  border: 1px solid var(--btn-border);
+  background: var(--btn-bg);
+  color: var(--btn-fg);
+  border-radius: 10px;
+  cursor: pointer;
+  transition:background-color .2s ease,color .2s ease,border-color .2s ease;
+}
+.tab:hover{background:var(--btn-bg-hover);}
+.tab.active {
+  background: var(--primary-bg);
+  color: var(--primary-fg);
+  border-color: transparent;
+}
+.tab-content { display: none; }
+.tab-content.active { display: block; }
+input[type="text"],
+input[type="password"],
+input[type="email"],
+input[type="tel"],
+input[type="search"],
+input[type="number"]{
+  width: 90%;
+  margin: 8px auto;
+  display:block;
+}
+.btn {
+  background: var(--primary-bg);
+  color: var(--primary-fg);
+  padding: 10px;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  width: 100%;
+  transition:background-color .2s ease,color .2s ease,box-shadow .2s ease,transform .1s ease;
+  box-shadow:0 6px 16px color-mix(in srgb, var(--primary-bg) 35%, transparent);
+}
+.btn:hover{background:var(--primary-hover);box-shadow:0 8px 22px color-mix(in srgb, var(--primary-bg) 45%, transparent);}
+.btn:active{transform:translateY(1px);}
+.error {
+  font-size: 12px;
+  color: #ff3b30;
+}
+.code-container {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  margin: 15px 0;
+}
+
+.code-input {
+  width: 40px;
+  height: 50px;
+  text-align: center;
+  font-size: 20px;
+  border-radius: 10px;
+  outline: none;
+  background: var(--input-bg);
+  border:1px solid var(--input-border);
+  color:var(--input-fg);
+  transition: all 0.2s ease;
+}
+
+.code-input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 5px color-mix(in srgb, var(--accent) 35%, transparent);
+}
+
+/* iOS-стиль для кнопки */
+.ios-button {
+  width: 100%;
+  margin-top: 15px;
+}
+/* === disabled buttons === */
+.btn[disabled], .ios-button[disabled] { opacity: .6; cursor: not-allowed; }
+
+/* note under the send code button during countdown */
+.resend-note { width: 90%; margin: 6px auto 0; text-align: center; font-size: 12px; color: var(--muted); }
+
+/* password strength meter */
+.strength-wrap { width: 90%; margin: 4px auto 0; }
+.strength-meter { height: 6px; background: var(--btn-border); border-radius: 999px; overflow: hidden; }
+.strength-meter > span { display: block; height: 100%; width: 0; transition: width .25s ease; }
+.strength-weak { background: #ff3b30; }
+.strength-medium { background: #f59e0b; }
+.strength-strong { background: #22c55e; }
+.hint { width: 90%; margin: 4px auto 0; font-size: 12px; color: var(--muted); }
+
+
+/* даём полю место под глазик только там, где он есть */
+.input-group.with-eye > input {
+  padding-right: 44px;              /* было 40px — добавили ещё 4px запаса */
+  box-sizing: border-box;
+}
+
+/* сам глазик — внутри поля, без рамок и системных стилей */
+.toggle-pass{
+  position: absolute;
+  right: 12px;                      /* отступ от правого края поля */
+  top: 50%;
+  transform: translateY(-50%);
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: 0;
+  outline: 0;
+  -webkit-appearance: none;
+  appearance: none;
+  z-index: 1;                       /* поверх фона инпута */
+}
+
+
+/* 1) БАЗОВАЯ ОБЁРТКА ДЛЯ ПОЛЯ С ГЛАЗИКОМ */
+.input-group{
+  position: relative;       /* <-- обязательно, иначе глазик позиционируется от модалки */
+  width: 90%;
+  margin: 0;
+}
+.input-group > input{
+  width: 100%;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+/* 2) ОТСТУП ПОД ГЛАЗИК ТОЛЬКО ТАМ, ГДЕ ОН ЕСТЬ */
+.input-group.with-eye > input{
+  padding-right: 44px;
+}
+
+/* 3) САМ ГЛАЗИК — КАК ИКОНКА ВНУТРИ ПОЛЯ */
+.toggle-pass{
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 24px; height: 24px;
+  display: flex; align-items: center; justify-content: center;
+  background: transparent; border: 0; outline: 0;
+  -webkit-appearance: none; appearance: none;
+  z-index: 1;
+}
+
+/* 4) КРАСНЫЕ ОШИБКИ: ПОДПИСЬ + РАМКА */
+.field-error{
+  display: block;
+  width: 90%;
+  margin: 0;
+  font-size: 12px;
+  color: #ff3b30;
+}
+input.input-error{
+  border-color: #ff3b30;
+}
+
+
+#register .input-group + .input-group {
+  margin-top: 16px;            /* доп. зазор между Пароль и Повторите пароль */
+}
+
+
+/* --- Единая колонка внутри модалки --- */
+.modal-content .tabs,
+.modal-content .input-group,
+.modal-content .btn,
+.modal-content .code-container,
+.modal-content .field-error {
+  width: 100%;
+  margin-left: 0;
+  margin-right: 0;
+  box-sizing: border-box;
+}
+
+/* Инпуты на всю ширину колонки */
+.modal-content input:not(.code-input) {
+  width: 100%;
+  margin: 8px 0;
+  box-sizing: border-box;
+}
+
+/* Вкладки по тем же краям, что и поля */
+.tabs {
+  width: 100%;
+  margin: 0 0 15px; /* только нижний отступ */
+}
+
+/* Кнопка «Зарегистрироваться» — как и все остальные элементы */
+.modal-footer .ios-button {
+  width: 100%;
+  margin: 8px auto;
+  display: block;
+  box-sizing: border-box;
+}
+
+/* Контейнер поля с глазиком не сужаем */
+.input-group {
+  width: 100%;
+  margin: 8px 0;  /* равные вертикальные отступы с остальными */
+}
+
+/* Отступ под глазик — только там, где он есть */
+.input-group.with-eye > input { padding-right: 44px; }
+
+
+// === disable "Отправить код" пока поля не заполнены ===
+(() => {
+  const reg = document.getElementById('register');
+  if (!reg) return;
+
+  const sendCodeBtn = reg.querySelector('.btn'); // "Отправить код"
+  if (!sendCodeBtn) return;
+
+  const loginEl = document.getElementById('regLogin');
+  const pass1   = document.getElementById('regPass');
+  const pass2   = document.getElementById('regPass2');
+  const phoneEl = reg.querySelector('input[placeholder="Телефон или Email"]');
+
+  const fields = [loginEl, pass1, pass2, phoneEl].filter(Boolean);
+
+  // если хочешь учитывать «занят логин»:
+  const usedLogins = ["admin","test"];  // замени на реальную проверку с бэка
+
+  function allFilled() {
+    return fields.every(i => i.value.trim().length > 0);
+  }
+
+  // ВАРИАНТ ПО-СТРОЖЕ: все заполнены + пароли совпадают + логин свободен
+  function isReadyStrict() {
+    const filled = allFilled();
+    const passOk = pass1 && pass2 ? pass1.value === pass2.value : true;
+    const loginOk = loginEl ? !usedLogins.includes(loginEl.value.trim().toLowerCase()) : true;
+    return filled && passOk && loginOk;
+  }
+
+  // ВАРИАНТ ПРОЩЕ: только «все заполнены»
+  function isReadySimple() {
+    return allFilled();
+  }
+
+  function updateSendCodeState() {
+    // выбери нужную строку:
+    // sendCodeBtn.disabled = !isReadySimple();   // только заполнение
+    sendCodeBtn.disabled = !isReadyStrict();      // заполнение + совпадение паролей + логин не занят
+  }
+
+  // следим за вводом и обновляем состояние кнопки
+  fields.forEach(i => i && i.addEventListener('input', updateSendCodeState));
+
+  // первый вызов при загрузке
+  updateSendCodeState();
+})();

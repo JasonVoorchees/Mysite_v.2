@@ -27,10 +27,20 @@ jobs:
       - name: Configure Pages
         uses: actions/configure-pages@v5
 
+      - name: Build public directory
+        run: |
+          rm -rf public
+          mkdir -p public
+          cp -R docs/. public/
+
+      - name: Verify index.html
+        run: |
+          test -f public/index.html
+
       - name: Upload static site
         uses: actions/upload-pages-artifact@v3
         with:
-          path: docs
+          path: public
 
       - name: Deploy to GitHub Pages
         id: deployment
