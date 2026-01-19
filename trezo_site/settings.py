@@ -56,6 +56,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'core.context_processors.ui_flags',
             ],
         },
     },
@@ -111,3 +112,5 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 LOGIN_URL = '/'
 LOGIN_REDIRECT_URL = '/archive.html'
+
+SHOW_MARKETPLACE_BUTTONS = os.environ.get('TREZO_SHOW_MARKETPLACE_BUTTONS', '0') == '1'
